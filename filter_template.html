@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="style.css" type="text/css">
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<title>Signaux propres des filtres</title>
+
+</head>
+  <body>
+<h1>Signaux propres des filtres</h1>
+
+<p>
+  Les filtres (systèmes linéaires invariants) admettent comme signaux propres les exponentielles complexes.
+  Dans le cas discret, la réponse à une entrée \(e_\nu [n] = \exp(i 2\pi \nu n)\) est
+  \(H(\nu) e_\nu[n]\), une exponentielle complexe
+  de la même fréquence, multipliée par la réponse fréquentielle du filtre \(H(\nu)\), obtenue par
+  transformée de Fourier discrète de la réponse impulsionnelle du filtre :
+  \[H(\nu) = \sum_{n\in\mathbf Z} h[n] \exp(-i 2\pi \nu n) .\]
+
+
+  <h2> Démonstration </h2>
+  On donne ici l'exemple du dérivateur, de réponse impulsionnelle
+  \[h[n] = \delta[n] - \delta[n-1], \]
+  et de réponse fréquentielle
+  \[H(\nu) = 2i \sin(\pi\nu) \exp(-i\pi\nu). \]
+  
+<p>INSERTFIG%filter%</p>
+
+</body>

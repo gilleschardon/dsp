@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Fourier Transform</title>
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/nicolaspanel/numjs@0.15.1/dist/numjs.min.js"></script>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  </head>
+<datalist id="detents">
+  <option value="0000">
+</datalist>
+  <style>
+
+
+
+
+    div > input {
+      width: 800px;
+    }
+
+    div > label {
+      display: inline;
+    }
+
+    #plotinput {
+      fill: none;
+      stroke: black;
+      stroke-width: 3;
+  }
+
+      #plotpartial {
+      fill: none;
+      stroke: red;
+      stroke-width: 1;
+  }
+
+    #wrap {
+      display: inline-block;
+      vertical-align: top;
+    }
+    #cursors {
+      display: inline-block;
+    }
+
+    #my_dataviz1 > input {
+      display: inline;
+      width: 100px;
+    }
+
+    #logo {
+      margin-top: 50px;
+      width: 200px;
+        display: block;
+  margin-left: auto;
+  margin-right: auto;
+    }
+
+    body { font-family: Sans-serif}
+  </style>
+
+  <body>
+
+
+<div id="wrap">
+
+  <h1>Fourier series</h1>
+    <div id="math">
+
+
+      \[f_n = \frac{1}{2\pi} \int_{-\pi}^\pi f(t) \exp(-i nt) dt\]
+      \[f(t) = \sum_{n\in \mathbf{Z}} f_n \exp(i nt)\]
+    </div>
+
+    <div id="my_dataviz1">
+      <input type="button" value="reset" onclick="reset()"></input>
+      <input type="button" value="mute" onclick="mute()"></input>
+      <input type="button" value="square" onclick="square()"></input>
+      <input type="button" value="saw" onclick="saw()"></input>
+
+      <input type="button" value="triangle" onclick="triangle()"></input>
+    <input type="button" value="pulse" onclick="pulse()"></input>
+
+    <input type="button" value="play" onclick="play()"></input>
+    <input type="range" id="f0" name="f0" min="10" max="4000" step="0.01" value="440"></input>
+    </div>
+    <p style="font-size: small; color: gray">G. Chardon, K. Mazaheri, M. Défosse, A.Curty</p>
+
+
+
+  </div>
+
+  <div id="cursors">
+
+  <table id="amps">
+    <thead><tr><th>#</th><th>cos  \( (\mathrm{Re} f_n) \)  </th><th>sin  \( (\mathrm{Im} f_n) \) </th><th></th></tr></thead>
+  </table>
+</div>
+</body>
+
+  <script>
+    // Set the dimensions, margins and the scale of the graphs
+
+    const scaleInput = 10;
+    const scaleFT = 3;
+    const pointNumber = 1000;
+
+    var Freq = 440;
+
+    const input = document.getElementById('f0');
+    input.addEventListener('input', updateValue);
+
+    function updateValue(e) {
+      Freq = e.target.value;
+    }
+
+    const margin = {
+        top: 10,
+        right: 30,
+        bottom: 30,
+        left: 30
+      },
+      width = 800 - margin.left - margin.right,
+      height = 400 - margin.top - margin.bottom;
+
+    // USER INPUT : parameters, the function and its Fourier transform
+
+    /* Parameters : Javascript object containing parameters
+        param_key : { name, interval, step, value } */
+
+Npartials = 40;
+        interval = [-1, 1];
+        step = 0.01;
+        value = 0.;
+
+        params = new Map();
+        params['cos'] = new Map();
+        params['sin'] = new Map();
+        params['on'] = new Map();
+
+        params['type'] = [];
+        params['freq'] = 0;
+        params['amp'] = 0;
+
+    const inputFunction = (t, params) => {
+      output = 0;
+
+      for (k = 1; k <= Npartials; k++)
+
+
+            {
+              if (params['on'][k])
+              {
+      output +=  params['cos'][k] * Math.cos(k*t) + params['sin'][k] * Math.sin(k*t);
+      }
+    }
+      return output;
+
+    };
+
+const partialFunction = (t, params) => {
+      output = 0;
+
+      if (params['type'] = 'cos')
+      {
+        output = params['amp'] * Math.cos(params['freq']*t)
+      }
+      else if (params['type'] = 'sin')
+      {
+        output = params['amp'] * Math.sin(params['freq']*t)
+      }
+
+      return output;
+
+    };
+
+    // END OF USE INPUT
+
+    // x Array for input and FT
+
+    const xInput = nj.arange(
+      -scaleInput,
+      scaleInput,
+      (scaleInput * 2) / pointNumber
+    );
+    const l_xInput = xInput.tolist();
+
+    // D3: creation of cursors
+    var table = d3.select("#amps")
+
+for (k = 1; k <= Npartials; k++)
+{
+      var row = table.append("tr");
+
+      // Label of the cursor
+      row
+        .append('td')
+        .append("label")
+        .attr("for", "r")
+        .text(k);
+
+
+        vsin = (1/(k**1));// * (-1)**k;
+        if (k%2 == 0)
+        {
+          vsin = 0;
+        }
+        vcos = 0;
+
+      // Cursor
+      row
+        .append('td')
+        .append("input")
+        .attr("type", "range")
+        .attr("name", "r1")
+        .attr("min", interval[0])
+        .attr("max", interval[1])
+        .attr("step", step)
+        .attr("value", vcos)
+        .attr("data-freq", k)
+        .attr("data-type", "cos")
+        .attr("class", "cos")
+        .attr("list", "detents")
+        .on("input", updatePlot)
+        .on("mouseenter", showPartial)
+        .on("mouseleave", hidePartial);
+      row
+        .append('td')
+        .append("input")
+        .attr("type", "range")
+        .attr("name", "i1")
+        .attr("min", interval[0])
+        .attr("max", interval[1])
+        .attr("step", step)
+        .attr("value", vsin)
+        .attr("data-freq", k)
+        .attr("data-type", "sin")
+        .attr("class", "sin")
+        .on("input", updatePlot)
+        .on("mouseenter", showPartial)
+        .on("mouseleave", hidePartial);
+
+        row.append('td')
+        .append('input')
+        .attr("type", 'checkbox')
+        .attr("data-freq", k)
+        .attr("data-type", "on")
+        .attr("checked", 1)
+        .attr('class', 'on')
+        .on("input", updatePlot);
+
+        params['cos'][k] = vcos;
+        params['sin'][k] = vsin;
+        params['on'][k] = 1;
+}
+    // Class Plot
+
+    class Plot {
+      constructor(parent, x, id) {
+        this.plot = parent.append("path").attr("id", id);
+        this.x = x;
+      }
+
+      draw(l_x, l_y, y) {
+        var plot = this.plot;
+        var x = this.x;
+
+        const data = l_x.map((element, index) => [element, l_y[index]]);
+
+        plot.datum(data).attr(
+          "d",
+          d3
+            .line()
+            .x(d => x(d[0]))
+            .y(d => y(d[1]))
+        );
+      }
+    }
+
+    // D3: creation of graphs
+
+    // Input
+    var svgInput = d3
+      .select("#my_dataviz1")
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .attr("display", "block")
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    const xInputScale = d3
+      .scaleLinear()
+      .domain([Math.round(d3.min(l_xInput)), Math.round(d3.max(l_xInput))])
+      .range([0, width]);
+
+    const yInputScale = d3.scaleLinear().range([height, 0]);
+
+    svgInput
+      .append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(xInputScale));
+
+    axisYInput = svgInput.append("g");
+
+
+    // Initial plot
+
+    var plotInput = new Plot(svgInput, xInputScale, "plotinput");
+    var plotPartial = new Plot(svgInput, xInputScale, "plotpartial");
+
+
+
+    plot();
+
+    // Plot function
+
+    function plot() {
+      // Input
+      const l_yInput = l_xInput.map(t => inputFunction(t, params));
+      const absMaxInput = d3.max([
+        Math.abs(d3.min(l_yInput)),
+        Math.abs(d3.max(l_yInput))
+      ]);
+
+
+
+      yInputScale.domain([-absMaxInput, (absMaxInput)]);
+      axisYInput.call(d3.axisLeft(yInputScale));
+
+      plotInput.draw(l_xInput, l_yInput, yInputScale);
+
+      const l_ypartial = l_xInput.map(t => partialFunction(t, params));
+      plotPartial.draw(l_xInput, l_ypartial, yInputScale);
+
+
+
+
+    }
+
+    // Update plot function
+
+    function updatePlot() {
+      //const { id, value } = this;
+      if (this.getAttribute("data-type") == 'on')
+      {
+          params[this.getAttribute("data-type")][this.getAttribute("data-freq")] = this.checked;
+      }
+     else
+     {
+      params[this.getAttribute("data-type")][this.getAttribute("data-freq")] = this.value
+    }
+
+    params['type'] = this.getAttribute("data-type");
+    params['freq'] = this.getAttribute("data-freq");
+    params['amp'] = this.value;
+
+      plot();
+    }
+
+
+    function showPartial() {
+      //const { id, value } = this;
+
+      document.getElementById('plotpartial').setAttribute("visibility", "visible");
+
+    params['type'] = this.getAttribute("data-type");
+    params['freq'] = this.getAttribute("data-freq");
+    params['amp'] = this.value;
+
+      plot();
+    }
+    function hidePartial() {
+      //const { id, value } = this;
+
+      document.getElementById('plotpartial').setAttribute("visibility", "hidden");
+
+    }
+    function reset() {
+      for (k = 1; k <= Npartials; k++)
+            {
+              params['cos'][k] = 0;
+              params['sin'][k] = 0;
+              params['on'][k] = 1;
+
+
+            }
+            d3.selectAll(".cos").property("value", 0);
+            d3.selectAll(".sin").property("value" ,0);
+            d3.selectAll(".on").property("checked" ,1);
+
+            plot();
+    }
+  function mute() {
+for (k = 1; k <= Npartials; k++)
+            {
+              params['on'][k] = 0;
+            }
+
+            d3.selectAll(".on").property("checked" ,0);
+
+            plot();
+    }
+function square() {
+      for (k = 1; k <= Npartials; k++)
+            {
+                vsin = (1/(k**1));// * (-1)**k;
+                if (k%2 == 0)
+                {
+                  vsin = 0;
+                  }
+                  vcos = 0;
+
+              params['cos'][k] = vcos;
+              params['sin'][k] = vsin;
+              params['on'][k] = 1;
+
+              d3.selectAll(".cos[data-freq='"  +k+  "']").property("value", vcos);
+              d3.selectAll(".sin[data-freq='" +k+ "']").property("value" ,vsin);
+            }
+
+            d3.selectAll(".on").property("checked" ,1);
+
+            plot();
+    }
+function saw() {
+      for (k = 1; k <= Npartials; k++)
+            {
+                vsin = (1/(k**1));// * (-1)**k;
+
+                  vcos = 0;
+
+              params['cos'][k] = vcos;
+              params['sin'][k] = vsin;
+              params['on'][k] = 1;
+
+              d3.selectAll(".cos[data-freq='"  +k+  "']").property("value", vcos);
+              d3.selectAll(".sin[data-freq='" +k+ "']").property("value" ,vsin);
+            }
+
+            d3.selectAll(".on").property("checked" ,1);
+
+            plot();
+    }
+function triangle() {
+      for (k = 1; k <= Npartials; k++)
+            {
+                vcos = (1/(k**2)) * (-1)**k;
+                if (k%2 == 0)
+                {
+                  vcos = 0;
+                  }
+                  vsin = 0;
+
+              params['cos'][k] = vcos;
+              params['sin'][k] = vsin;
+              params['on'][k] = 1;
+
+              d3.selectAll(".cos[data-freq='"  +k+  "']").property("value", vcos);
+              d3.selectAll(".sin[data-freq='" +k+ "']").property("value" ,vsin);
+            }
+
+            d3.selectAll(".on").property("checked" ,1);
+
+            plot();
+    }
+function pulse() {
+      for (k = 1; k <= Npartials; k++)
+            {
+                vcos = 1;
+                  vsin = 0;
+
+              params['cos'][k] = vcos;
+              params['sin'][k] = vsin;
+              params['on'][k] = 1;
+
+              d3.selectAll(".cos[data-freq='"  +k+  "']").property("value", vcos);
+              d3.selectAll(".sin[data-freq='" +k+ "']").property("value" ,vsin);
+            }
+
+            d3.selectAll(".on").property("checked" ,1);
+
+            plot();
+    }
+
+
+function play()
+{
+
+var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+// Create an empty three-second stereo buffer at the sample rate of the AudioContext
+var myArrayBuffer = audioCtx.createBuffer(2, audioCtx.sampleRate, audioCtx.sampleRate);
+
+// Fill the buffer with white noise;
+// just random values between -1.0 and 1.0
+for (var channel = 0; channel < myArrayBuffer.numberOfChannels; channel++) {
+  // This gives us the actual array that contains the data
+  var nowBuffering = myArrayBuffer.getChannelData(channel);
+Max_sig = 0;
+
+
+  var prebuf = Array();
+  for (var i = 0; i < myArrayBuffer.length; i++) {
+
+
+    // Math.random() is in [0; 1.0]
+    // audio needs to be in [-1.0; 1.0]
+    sample = inputFunction(i/audioCtx.sampleRate * Freq * Math.PI, params);
+    prebuf[i] = sample;
+    //prebuf[i] = Math.random()*2-1;
+    Max_sig = Math.max(Max_sig, Math.abs(sample))
+  }
+  for (var i = 1; i < myArrayBuffer.length; i++) {
+
+
+    nowBuffering[i] = prebuf[i] / Max_sig;
+  }
+
+}
+
+// Get an AudioBufferSourceNode.
+// This is the AudioNode to use when we want to play an AudioBuffer
+
+var source = audioCtx.createBufferSource();
+
+// set the buffer in the AudioBufferSourceNode
+source.buffer = myArrayBuffer;
+
+// connect the AudioBufferSourceNode to the
+// destination so we can hear the sound
+source.connect(audioCtx.destination);
+
+// start the source playing
+source.start();
+}
+
+
+
+  </script>
+</html>

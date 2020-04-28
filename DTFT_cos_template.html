@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="style.css" type="text/css">
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<title>TFTD d'un cosinus</title>
+</head>
+  <body>
+<h1>TFTD d'un cosinus</h1>
+
+<p>La transformée de Fourier à temps discret d'un cosinus \(c_{\nu_0}[n] = \cos(2\pi\nu_0 n)\) est donnée par
+  \[C_{\nu_0} = \frac{1}{2}\sum_{k\in \mathbf Z} \delta_{\nu_0 + k} + \delta_{-\nu_0 + k}. \]
+
+Ce résultat est la conséquence de la décomposition du cosinus
+\[ \cos(t) = \frac{1}{2}(e^{it} + e^{-it}) \]
+et de la TFTD d'une exponentielle complexe :
+\[ \exp(i 2\pi \nu_0 n) \mathop\longrightarrow^{\mathrm{TFTD}} \sum_{k\in \mathbf Z} \delta_{\nu_0 + k}. \]
+
+<p>En pratique, on trace souvent la TFTD uniquement dans l'intervalle \( [-1/2, 1/2[ \), dans lequel on ne trouve que deux impulsions de Dirac.
+
+  Quand \( \nu_0 \) augmente, on remarque un phénomème de repliement : les fréquences au dessus de \(1/2\) sont repliées en basses fréquences.
+<p>INSERTFIG%DTFT_cos%</p>
+
+</body>

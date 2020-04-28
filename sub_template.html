@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="style.css" type="text/css">
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<title>Décimation</title>
+</head>
+  <body>
+<h1>Décimation</h1>
+
+<p>
+Étant donné un signal \(x[n]\) et un facteur de décimation \(K\), on construit le signal décimé
+\[ y[n] = x[Kn]. \]
+La TFTD de \(y[n]\) est donnée par
+\[ Y(\nu) = \frac{1}{K} \sum_{k=0}^{K-1}  X\left(\frac{\nu - k}{K}\right) \]
+On observe une superposition de copies du spectre du signal original (à comparer au repliement spectral pour l'échantillonnage de signaux continus).
+</p>
+
+<h2> Démonstration </h2>
+
+Dans le cas d'une sinusoïde, la sinusoïde est repliée dans les basses fréquences quand la fréquence réduite dépasse \(K/2\).
+L'intervalle \([-1/2, 1/2[\) est indiqué dans les deux cas, qui correspond au domaine de fréquences utilisées pour une reconstruction
+du signal en temps continu (reconstructions tracées sur le premier graphe).
+
+
+<p>INSERTFIG%sub%</p>
+
+</body>

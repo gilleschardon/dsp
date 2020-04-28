@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="style.css" type="text/css">
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<title>Calcul de réponse fréquentielle de filtre FIR par FFT</title>
+</head>
+  <body>
+<h1>Calcul de réponse fréquentielle de filtre FIR par FFT</h1>
+
+<p>
+  La réponse fréquentielle d'un filtre à réponse impulsionnelle finie peut être calculée efficacement comme une transformée de Fourier rapide (FFT).
+
+  Sans perte de généralité, on considère le cas d'un filtre RIF causal, de réponse impulsionnelle \(h[n] \) de support \([0, N-1]\). Avec le vecteur \(\mathbf h^N = (h[0], \ldots, h[N-1])\) contenant les coefficients non nuls de la réponse impulsionnelle, la transformée de Fourier discrète \(\mathbf H^N\) de  \(\mathbf h^N\) contient
+  des échantillons de la réponse fréquentielle du filtre :
+  \[H^N_k = H\left(\frac{k}{N}\right) \mbox{ pour } 0 \leq k < N.\]
+							       </p>
+<p>
+  L'échantillonnage de la réponse fréquentielle étant trop grossier pour un bon tracé de la réponse fréquentielle, on utilise la technique de zero-padding, qui consiste à calculer la DFT du vecteur \(\mathbf h^L = (h[0], \ldots, h[N-1], 0, \ldots, 0) \) de taille \(L > N\). On a alors un échantillonage plus fin :
+    \[H^L_k = H\left(\frac{k}{L}\right) \mbox{ pour } 0 \leq k < L.\]
+</p>
+
+<p>Le graphe peut ensuite être recentré autour de l'origine pour mettre en valeur la symétrie de la TFTD d'un signal réel : \(H(-\nu) = H(\nu)^\star\).
+
+  <h2> Démonstration </h2>
+
+  On trace la réponse fréquentielle du filtre de réponse impulsionnelle \[h[n] = (-1)^n \mbox{ pour } 0 \leq n < 5.\]
+  
+<p>INSERTFIG%FFT_filter%</p>
+
+</body>

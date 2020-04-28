@@ -1,0 +1,62 @@
+body
+{
+    font-family: sans-serif;
+}
+
+#pics
+{
+    float: right;
+}
+
+a
+{
+    text-decoration: none;
+}
+
+ol.publis li
+{
+    margin-bottom: 0.3em;
+}
+
+.horaires {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.horaires td, .horaires th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+/*.horaires tr:nth-child(even){background-color: #f2f2f2;}
+
+.horaires tr:hover {background-color: #ddd;}
+*/
+
+.horaires th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #000000;
+    color: white;
+}
+
+.horaires tr.nostop
+{
+ background-color: #eeeeee;
+}
+
+.horaires tr.catchable
+{
+ background-color: #ddffdd;
+}
+
+.horaires tr.noncatchable
+{
+ background-color: #ffeeee;
+}
+.horaires tr.favorite
+{
+    background-color: #44ccff;
+}

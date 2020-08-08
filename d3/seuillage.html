@@ -1,0 +1,40 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Test d3</title>
+
+
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+  .stem {
+    opacity: 0.5
+  }
+  .stem .lines {
+    stroke-width: 1;
+  }
+
+  .axis {
+    opacity: 0.5;
+    stroke-width: 1;
+  }
+
+  </style>
+</head>
+
+<body>
+  <input value="0" type="range" id="seuil" min="0" max = "2" step="0.1" />
+  <div id="plotx"></div>
+  <div id="ploty"></div>
+  <div id="plotxx"></div>
+  <div id="plotyy"></div>
+
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="simpled3.js"></script>
+  <script src="dsp.js"></script>
+  <script src="seuillage.js"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <meta charset="utf-8">
+
+  <title>Test d3</title>
+
+
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+
+
+  .sigreal   {color: blue;}
+  .sigimag   {color: red;}
+  .dftreal {color: blue}
+  .dftimag {color: red}
+
+  .line {stroke-width: 2px }
+
+  .axis {
+    opacity: 1;
+    stroke-width: 1;
+  }
+  .axis line {
+    opacity: 1;
+    stroke-width: 1;
+  }
+  .xgrid, .ygrid  {
+    opacity: 1;
+    stroke-width: 2px;
+    stroke: #eee;
+  }
+
+  .domain, .tick line {
+    stroke: #aaa;
+  }
+
+  .frame {
+    opacity: 1;
+    stroke-width: 2px;
+    stroke: #999;
+  }
+
+
+  </style>
+</head>
+
+<body>
+
+  <input value="Reset" type="submit" id="reset"/>
+
+  <div id="plotsig"></div>
+  <div id="plotdft"></div>
+
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="simpled3.js"></script>
+  <script src="dft.js"></script>
+<script> window.MathJax.typeset()</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>K-means</title>
+
+
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+
+  #data1 {
+    fill: red;
+  }
+  #data2 {
+    fill: blue;
+  }
+  #data3 {
+    fill: green;
+  }
+  #data4 {
+    fill: yellow;
+  }
+  #data5 {
+    fill: orange;
+  }
+  #means {
+    fill: black;
+    opacity: 0.5;
+  }
+  </style>
+</head>
+
+<body>
+  <h1>K-means clustering</h1>
+  <p>Observe la convergence (ou pas lol) de K-means vers les vrais clusters</p>
+  <input value="Step" type="submit" id="step" />
+
+  <div id="plot"></div>
+
+
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="d3-delaunay.min.js"></script>
+
+  <script src="simpled3.js"></script>
+
+  <script src="Kmeans.js"></script>
+
+</body>
+</html>

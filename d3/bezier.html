@@ -1,0 +1,45 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <meta charset="utf-8">
+
+  <title>Test d3</title>
+
+
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+
+
+  .lines   {color: blue; stroke-width: 2px}
+
+
+  .line {stroke-width: 2px }
+
+  .axis {
+    opacity: 0;
+  }
+
+
+  .frame {
+    opacity: 0;
+  }
+
+
+  </style>
+</head>
+
+<body>
+  <input value="10" type="range" id="t" min="0" max="100"/>
+  <div id="bezier"></div>
+
+
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="simpled3.js"></script>
+  <script src="bezier.js"></script>
+<script> window.MathJax.typeset()</script>
+</body>
+</html>

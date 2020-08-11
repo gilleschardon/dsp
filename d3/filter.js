@@ -10,6 +10,20 @@ var margins = {
   top: 10
 };
 
+var margins2 = {
+  left: 50,
+  right: 20,
+  bottom: 10,
+  top: 10
+};
+
+var margins3 = {
+  left: 20,
+  right: 25,
+  bottom: 10,
+  top: 10
+};
+
 var L = 20
 var resol = 10
 
@@ -55,8 +69,8 @@ nticky = 5
 
 axissig = new Axis("#plotsig", 1000, 200, margins, xrange, yrange, ntickx, nticky)
 
-axisgain = new Axis("#plotgain", 500, 200, margins, [-0.5,0.5], yrange, ntickx, nticky)
-axisphase = new Axis("#plotphase", 500, 200, margins, [-0.5,0.5], yrange, ntickx, nticky)
+axisgain = new Axis("#plotgain", 480, 200, margins2, [-0.5,0.5], yrange, ntickx, nticky)
+axisphase = new Axis("#plotphase", 480, 200, margins3, [-0.5,0.5], yrange, ntickx, nticky)
 
 
 freq = document.getElementById("freq").value / document.getElementById("freq").getAttribute("max") * 0.5
@@ -136,19 +150,18 @@ function reset()
 
 stemx = axissig.stem("in", "x[n]", datax)
 stemy = axissig.stem("out", "y[n]", datay)
-console.log(datax)
-linexc = axissig.line("in", dataxc)
-lineyc = axissig.line("out", datayc)
+linexc = axissig.line("in", "x[n]", dataxc)
+lineyc = axissig.line("out", "x[n]", datayc)
 
-scatgain = axisgain.scatter("gain", datadg)
-scatphase = axisphase.scatter("phase", datadp)
+scatgain = axisgain.scatter("gain", "", datadg)
+scatphase = axisphase.scatter("phase", "", datadp)
 
 datagain = {x:nu, y:Hgain}
 dataphase = {x:nu, y:Hphase}
 
 
-axisgain.line("gain", datagain)
-axisphase.line("phase", dataphase)
+axisgain.line("gain", "", datagain)
+axisphase.line("phase", "", dataphase)
 
 
 d3.select('#freq').on("input", update_freq)

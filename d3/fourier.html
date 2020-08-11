@@ -14,16 +14,12 @@
   <style>
 
 
-  .ir  {
-    color: #f66;
-  }
-  .in   {color: blue;}
-  .out   {color: red;}
-  .gain {color: blue}
-  .phase {color: red}
+  .sigreal   {color: blue;}
+  .sigimag   {color: red;}
+  .fourierreal {color: blue}
+  .fourierimag {color: red}
 
-  .line {stroke-width: 2px}
-  .in .line, .out .line {opacity: 0.2}
+  .line {stroke-width: 2px }
 
   .axis {
     opacity: 1;
@@ -49,23 +45,23 @@
     stroke: #999;
   }
 
-  #plotgain, #plotphase
-  {
-    display: inline-block;
-  }
+
 
   </style>
 </head>
 
 <body>
-  <input value="10" type="range" id="freq" min="0" max="100"/>
-  <div id="plotir"></div>
+
+
+  <p>Width<input class="slider" type="range" min="0" max="100" value="50" id="width"></input></p>
+  <p>Center<input class="slider" type="range" min="0" max="100" value="50" id="center"></input></p>
+
   <div id="plotsig"></div>
-  <div id="plotgain"></div><div id="plotphase"></div>
+  <div id="plotfourier"></div>
 
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="simpled3.js"></script>
-  <script src="filter.js"></script>
+  <script src="fourier.js"></script>
 <script> window.MathJax.typeset()</script>
 </body>
 </html>

@@ -76,9 +76,9 @@ function update()
 
 }
 
-cpoints = axisbezier.scatter("control", controlpoints, true, update)
-intp = axisbezier.scatter("control", int, true, update)
-pp = axisbezier.scatter("control", point, true, update)
+cpoints = axisbezier.scatter("control", controlpoints, update)
+intp = axisbezier.scatter("control", int)
+pp = axisbezier.scatter("control", point)
 
 l1 = axisbezier.lines("lines", "lines", lines1)
 l2 = axisbezier.lines("lines", "lines", lines2)

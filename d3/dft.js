@@ -44,8 +44,9 @@ axisdft = new Axis("#plotdft", 1000, 200, margins, xrange, yrangedft, ntickx, nt
 
 
 
-function updatesig()
+function updatesig(i, x, y, data)
 {
+  data.y[i] = y
 
   for (var i = 0; i < L; i++)
     {
@@ -63,8 +64,9 @@ function updatesig()
 }
 
 
-function updatefreq()
+function updatefreq(i, x, y, data)
 {
+  data.y[i] = y
 
   for (var i = 0; i < L; i++)
     {
@@ -72,7 +74,6 @@ function updatefreq()
                datasigreal.y[i] = datadftimag.y.reduce((a, hh, idx) => a - Math.sin(  2 * Math.PI * i * idx / L) * hh, datasigreal.y[i]) / L
                datasigimag.y[i] = datadftreal.y.reduce((a, hh, idx) => a + Math.sin(  2 * Math.PI * i * idx / L) * hh, 0)
                datasigimag.y[i] = datadftimag.y.reduce((a, hh, idx) => a + Math.cos(  2 * Math.PI * i * idx / L) * hh, datasigimag.y[i]) / L
-
     }
 
   stemsigreal.update()
@@ -95,16 +96,14 @@ function reset()
 
 }
 
-symbolreal = d3.symbol().size(2).type(d3.symbolCircle)()
-symbolimag = d3.symbol().size(2).type(d3.symbolCross)()
-
 symbolreal = "M 0 1 L -1 0 L 0 -1 Z"
 symbolimag = "M 0 1 L 1 0 L 0 -1 Z"
 
 
-stemsigreal = axissig.stem("sigreal", "x real", datasigreal, true, updatesig, symbolreal)
-stemsigimag = axissig.stem("sigimag", "x imag", datasigimag, true, updatesig, symbolimag)
-stemdftreal = axisdft.stem("dftreal", "X real", datadftreal, true, updatefreq, symbolreal)
-stemdftimag = axisdft.stem("dftimag", "X imag", datadftimag, true, updatefreq, symbolimag)
+
+stemsigreal = axissig.stem("sigreal", "\\(\\Re x[n]\\)", datasigreal, (i, x, y) => updatesig(i, x, y, datasigreal), symbolreal)
+stemsigimag = axissig.stem("sigimag", "\\(\\Im x[n]\\)", datasigimag, (i, x, y) => updatesig(i, x, y, datasigimag), symbolimag)
+stemdftreal = axisdft.stem("dftreal", "\\(\\Re X[k]\\)", datadftreal, (i, x, y) => updatefreq(i, x, y, datadftreal), symbolreal)
+stemdftimag = axisdft.stem("dftimag", "\\(\\Im X[k]\\)", datadftimag, (i, x, y) => updatefreq(i, x, y, datadftimag), symbolimag)
 
 d3.select('#reset').on("click", reset)

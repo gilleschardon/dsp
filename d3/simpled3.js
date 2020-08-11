@@ -101,7 +101,7 @@ class Axis {
 // drag_update pour mettre à jour les données (et appeler l'update)
 // symbol
 // rotate si on tourne pour les données négatives (pour les diracs)
-  stem(id, tag, data, dragable=false, drag_update, symbol = d3.symbol().size(2).type(d3.symbolCircle), rotate = false) {
+  stem(id, tag, data, drag_update = null, symbol = d3.symbol().size(2).type(d3.symbolCircle), rotate = false) {
     var g = this.axis.append("g").attr("class", id)
 
     this.legend.append('path').attr("d", symbol)
@@ -110,18 +110,18 @@ class Axis {
       .attr("class", id)
 
     var fo = this.legend.append("foreignObject").attr('x', '40').attr('y', (10 + this.legend_shift)).attr('width', '100').attr("height", "100")
-    fo.append('xhtml:p').attr("style", "margin:0 ; vertical-align:middle").text("\\(" + tag + "\\)")
+    fo.append('xhtml:p').attr("style", "margin:0 ; vertical-align:middle").text(tag)
 
   this.legend_shift = this.legend_shift + 30
-    return new Stem(g, data, this.scalex, this.scaley, dragable, this.yrange, drag_update, symbol, rotate)
+    return new Stem(g, data, this.scalex, this.scaley, this.yrange, drag_update, symbol, rotate)
   }
 
   // voronoi on trace les cellules
-  scatter(id, data, dragable=false,drag_update=null, voronoi=false) {
+  scatter(id, tag, data, drag_update=null, voronoi=false) {
     var g = this.axis.append("g").attr("class", id)
-    return new Scatter(g, data, this.scalex, this.scaley, dragable, this.xrange, this.yrange, drag_update, voronoi)
+    return new Scatter(g, data, this.scalex, this.scaley, this.xrange, this.yrange, drag_update, voronoi)
   }
-  line(id, data) {
+  line(id, tag, data) {
     var g = this.axis.append("g").attr("class", id)
     return new Line(g, data, this.scalex, this.scaley)
   }
@@ -135,21 +135,17 @@ class Axis {
     return new Lines(g, data, this.scalex, this.scaley)
   }
 
-  rectangle(id, x, y, w, h)
+  rectangle(id, tag, data)
   {
-    this.axis.append("g").append("rect")
-      .attr("id", id)
-      .attr("x", this.scalex(x))
-      .attr("y", this.scaley(y+h))
-      .attr("width", this.scalex(x+w) - this.scalex(x))
-      .attr("height", this.scaley(y) - this.scaley(y+h))
+    var g = this.axis.append("g").attr("class", id)
+    return new Rect(g, data, this.scalex, this.scaley)
   }
 }
 
 
 // stemplot
 class Stem{
-  constructor(g, data, scalex, scaley, dragable=false, range, drag_update,symbol , rotate){
+  constructor(g, data, scalex, scaley, range, drag_update,symbol , rotate){
 
     this.g = g
     // groupes svg pour les marqueurs et les stems
@@ -182,10 +178,11 @@ class Stem{
       .attr('transform', (d, i) => ("translate(" + this.scalex(d[0]) + ", " + this.scaley(d[1]) + ") scale(" + d[2] + ")") + ((this.rotate && d[1] < 0) ? " rotate(180)":"")) // on déplace au bon endroit et on tourne, si il faut
       .attr("fill", "currentcolor")
 
-     if (dragable)
+     if (drag_update)
      {
        // modifie les données (sur un seul axe) et appelle drag_update
-       this.g1.selectAll("path").call(d3.drag().on("drag", (d, i) => (this.data.y[i]=limit_interval(this.scaley.invert(d3.event.y), this.range) , this.drag_update())))
+       //this.g1.selectAll("path").call(d3.drag().on("drag", (d, i) => (this.data.y[i]=limit_interval(this.scaley.invert(d3.event.y), this.range) , this.drag_update())))
+       this.g1.selectAll("path").call(d3.drag().on("drag", (d, i) => (this.drag_update(i, this.scalex.invert(d3.event.x), this.scaley.invert(d3.event.y)))))
      }
 
      // création des stems
@@ -219,7 +216,7 @@ class Stem{
 }
 
 class Scatter{
-  constructor(g, data, scalex, scaley, dragable=false, xrange, yrange, drag_update, voronoi){
+  constructor(g, data, scalex, scaley, xrange, yrange, drag_update, voronoi){
 
     this.g = g
     // groupes svg pour les marqueurs et les stems
@@ -257,7 +254,7 @@ class Scatter{
        this.g2.append("path").attr("stroke", "blue").attr("stroke-width", 2).attr("d", this.voronoi.render())
      }
 
-     if (dragable)
+     if (drag_update)
      {
        // on modifie les données sur les deux axes et on appelle drag_update
        this.g1.selectAll("path").call(d3.drag()
@@ -303,36 +300,42 @@ class Line{
     // on stocke une référence aux données : pour mettre à jour, on modifie les données et on appelle update()
     this.data = data
 
-    // création des marqueurs
-    //const Z = d3.zip(this.data.x, this.data.y, this.data.r)
-
-     //this.g1.selectAll("circle").data(Z).enter().append("circle").attr("cx",  (d) => this.scalex(d[0])).attr("cy",   (d) => this.scaley(d[1])).attr("r", (d) => d[2])
-
-
      const XY = d3.zip(this.data.x, this.data.y)
-     //this.g2.selectAll("path").append("path").datum(this.data.y).attr("d", d3.line().curve(d3.curveCardinal).x((d, i) => this.scalex(this.data.x[i])).y(d => this.scaley(d)))
-
      this.g1.append("path").datum(XY).attr("d", d3.line().x(d => this.scalex(d[0])).y(d => this.scaley(d[1]))).attr("fill", "none").attr("stroke", "currentcolor")
-     //this.g1.selectAll("circle").call(d3.drag().on("drag", (d, i) => (this.data.y[i]=this.scaley.invert(d3.event.y) , this.update())))
 
   }
 
   // update du graphe
   update() {
-    // this.g1.selectAll("circle").data(this.data.x).attr("cx", (d, i) => this.scalex(d))
-    // this.g1.selectAll("circle").data(this.data.y).attr("cy", (d, i) => this.scaley(d))
-    // this.g1.selectAll("circle").data(this.data.r).attr("r", (d, i) => d)
     const XY = d3.zip(this.data.x, this.data.y)
     this.g1.selectAll("path").datum(XY).attr("d", d3.line().x(d => this.scalex(d[0])).y(d => this.scaley(d[1])))
+  }
+}
+
+
+class Rect{
+  constructor(g, data, scalex, scaley){
+
+    // groupes svg pour les marqueurs et les stems
+    this.g1 = g.append("g").attr("class", "rect");
+
+    //échelle
+    this.scalex = scalex;
+    this.scaley = scaley;
+
+    // on stocke une référence aux données : pour mettre à jour, on modifie les données et on appelle update()
+    this.data = data
+
+     const XY = d3.zip(this.data.x, this.data.y, this.data.width, this.data.height)
+     this.g1.selectAll("rect").data(XY).enter().append("rect").attr("x", (d) => this.scalex(d[0])).attr("y", (d) => this.scaley(d[1])).attr("width", (d) => + this.scalex(d[0] + d[2]) - this.scalex(d[0])).attr("height", (d) => - this.scaley(d[1] + d[3]) + this.scaley(d[1])).attr("fill", "currentcolor").attr("stroke", "none")
 
   }
-  line_attr(name, value)
-  {
-    this.g2.attr(name, value)
-  }
-  circle_attr(name, value)
-  {
-    this.g1.attr(name, value)
+
+  // update du graphe
+  update() {
+    const XY = d3.zip(this.data.x, this.data.y, this.data.width, this.data.height)
+    this.g1.selectAll("rect").data(XY).attr("x", (d) => this.scalex(d[0])).attr("y", (d) => this.scaley(d[1])).attr("width", (d) =>  this.scalex(d[0] + d[2]) - this.scalex(d[0])).attr("height", (d) =>  - this.scaley(d[1] + d[3]) + this.scaley(d[1]))
+
   }
 }
 
@@ -349,36 +352,16 @@ class Lines{
     // on stocke une référence aux données : pour mettre à jour, on modifie les données et on appelle update()
     this.data = data
 
-    // création des marqueurs
-    //const Z = d3.zip(this.data.x, this.data.y, this.data.r)
-
-     //this.g1.selectAll("circle").data(Z).enter().append("circle").attr("cx",  (d) => this.scalex(d[0])).attr("cy",   (d) => this.scaley(d[1])).attr("r", (d) => d[2])
-
-
      const XY = d3.zip(this.data.x1, this.data.y1, this.data.x2, this.data.y2)
-     //this.g2.selectAll("path").append("path").datum(this.data.y).attr("d", d3.line().curve(d3.curveCardinal).x((d, i) => this.scalex(this.data.x[i])).y(d => this.scaley(d)))
 
      this.g1.selectAll("line").data(XY).enter().append("line").attr("x1", (d) => this.scalex(d[0])).attr("y1", (d) => this.scaley(d[1])).attr("x2", (d) => this.scalex(d[2])).attr("y2", (d) => this.scaley(d[3])).attr("fill", "none").attr("stroke", "currentcolor")
-     //this.g1.selectAll("circle").call(d3.drag().on("drag", (d, i) => (this.data.y[i]=this.scaley.invert(d3.event.y) , this.update())))
 
   }
 
   // update du graphe
   update() {
-    // this.g1.selectAll("circle").data(this.data.x).attr("cx", (d, i) => this.scalex(d))
-    // this.g1.selectAll("circle").data(this.data.y).attr("cy", (d, i) => this.scaley(d))
-    // this.g1.selectAll("circle").data(this.data.r).attr("r", (d, i) => d)
     const XY = d3.zip(this.data.x1, this.data.y1, this.data.x2, this.data.y2)
-
     this.g1.selectAll("line").data(XY).attr("x1", (d) => this.scalex(d[0])).attr("y1", (d) => this.scaley(d[1])).attr("x2", (d) => this.scalex(d[2])).attr("y2", (d) => this.scaley(d[3]))
-  }
-  line_attr(name, value)
-  {
-    this.g2.attr(name, value)
-  }
-  circle_attr(name, value)
-  {
-    this.g1.attr(name, value)
   }
 }
 

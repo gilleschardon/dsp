@@ -62,8 +62,18 @@ function reset()
     stemz.update()
 }
 
-stemx = axisx.stem("dx", "x[n]", datax, true, update)
-stemy = axisy.stem("dy", "y[n]", datay, true, update)
-stemz = axisz.stem("dz", "(x * y)[n]", dataz, false, update)
+function updatex(i, x, y)
+{
+  datax.y[i] = y
+  update()
+}
+function updatey(i, x, y)
+{
+  datay.y[i] = y
+  update()
+}
+stemx = axisx.stem("dx", "x[n]", datax, updatex)
+stemy = axisy.stem("dy", "y[n]", datay, updatey)
+stemz = axisz.stem("dz", "(x * y)[n]", dataz)
 
 d3.select('#reset').on("click", reset)

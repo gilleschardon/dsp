@@ -6,7 +6,7 @@
 
   <meta charset="utf-8">
 
-  <title>Test d3</title>
+  <title>Transformée de Fourier</title>
 
 
   <link rel="stylesheet" href="styles.css">
@@ -53,8 +53,22 @@
 
 <body>
 
+<h1>Transformée de Fourier</h1>
 
+<p>La transformée de Fourier est composé de deux Dirac de fréquences opposées et d'amplitudes égales, conséquence de la formule d'Euler
+  \[
+  \cos(2\pi ft) = \frac{1}{2}\left( e^{i2\pi ft} +  e^{-i2\pi ft}\right)
+  \]<p>
 
+<p>La manipulation des amplitudes et des fréquences des diracs permet
+  <ul>
+    <li>de moduler le signal, en déplaçant les diracs sur l'axe des fréquences</li>
+    <li>obtenir une exponentielle complexe, en annulant un des diracs</li>
+    <li>obtenir un sinus, en donnant des amplitudes imaginaires opposées aux diracs :  \[
+      \sin(2\pi ft) = \frac{1}{2i}\left( e^{i2\pi ft} -  e^{-i2\pi ft}\right)
+      \] </li>
+  </ul>
+</p>
 
   <div id="plotsig"></div>
   <div id="plotdft"></div>

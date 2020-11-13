@@ -6,7 +6,7 @@
 
   <meta charset="utf-8">
 
-  <title>Test d3</title>
+  <title>Série de Fourier</title>
 
 
   <link rel="stylesheet" href="styles.css">
@@ -52,12 +52,14 @@
 </head>
 
 <body>
+<h1>Série de Fourier</h1>
 
-  <p>Discrete Fourier Transform :
-    \[
-    X[k] = \frac{1}{N} \sum_{n=0}^{N-1} \exp\left(- i 2 \pi n \frac{k}{N}\right) x[n]
-    \]
-  </p>
+<p>La série de Fourier d'un signal \(x(t)\) sur l'intervalle \([0,1]\) est donnée par
+  \[x(t) = \sum_{n\in \mathbf{Z}} X_n \exp(i 2\pi nt)\]
+où les coefficients \(X_n\) sont donnés par
+  \[X_n =  \int_{-1}^1 x(t) \exp(-i2\pi nt) dt\]
+avec convergence en norme \(L^2\) si \(x(t)\) est d'énergie finie.</p>
+
 
   <input value="Reset" type="submit" id="reset"/>
   <input value="Square" type="submit" id="square"/>

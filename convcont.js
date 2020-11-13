@@ -2,7 +2,7 @@
 
 var margins = {
   left: 50,
-  right: 100,
+  right: 110,
   bottom: 10,
   top: 10
 };
@@ -145,14 +145,14 @@ function reset()
 }
 
 
-line1 = axisin1.line("in1", "x(t)", datain1)
-line2 = axisin2.line("in2", "y(t)", datain2)
+line1 = axisin1.line("in1", "\\(x(t)\\)", datain1)
+line2 = axisin2.line("in2", "\\(y(t)\\)", datain2)
 
-line1B = axisprod.line("in1", "x(t)", datain1B)
-line2B = axisprod.line("in2", "y(u-t)", datain2B)
-lineprod = axisprod.area("prod", "x(t)y(u-t)", dataprod)
-scatterout = axisout.scatter("prod", "z(t)", dataout)
-scattercurrent = axisout.scatter("current", "\\(z(t_0)\\)", datacurrent)
+line1B = axisprod.line("in1", "\\(x(t)\\)", datain1B)
+line2B = axisprod.line("in2", "\\(y(u-t)\\)", datain2B)
+lineprod = axisprod.area("prod", "\\(x(t)y(u_0-t)\\)", dataprod)
+scatterout = axisout.scatter("prod", "\\(z(u)\\)", dataout)
+scattercurrent = axisout.scatter("current", "\\(z(u_0)\\)", datacurrent)
 
 d3.select('#delay').on("input", update_delay)
 

@@ -1,0 +1,89 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <meta charset="utf-8">
+
+  <title>Calcul de réponse fréquentielle de filtre FIR par FFT</title>
+
+
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+
+
+  .ir  {
+    color: #f66;
+  }
+  .in   {color: blue;}
+  .out   {color: red;}
+  .gain {color: blue}
+  .phase {color: red}
+  .dft {color: red}
+
+  .line {stroke-width: 2px}
+  .in .line, .out .line {opacity: 0.2}
+
+  .axis {
+    opacity: 1;
+    stroke-width: 1;
+  }
+  .axis line {
+    opacity: 1;
+    stroke-width: 1;
+  }
+  .xgrid, .ygrid  {
+    opacity: 1;
+    stroke-width: 2px;
+    stroke: #eee;
+  }
+
+  .domain, .tick line {
+    stroke: #aaa;
+  }
+
+  .frame {
+    opacity: 1;
+    stroke-width: 2px;
+    stroke: #999;
+  }
+
+  #plotgain, #plotphase
+  {
+    display: inline-block;
+  }
+
+  </style>
+</head>
+
+<body>
+  <h1>Calcul de réponse fréquentielle de filtre FIR par FFT</h1>
+
+  <p>
+    La réponse fréquentielle d'un filtre à réponse impulsionnelle finie peut être calculée efficacement comme une transformée de Fourier rapide (FFT).
+
+    Sans perte de généralité, on considère le cas d'un filtre RIF causal, de réponse impulsionnelle \(h[n] \) de support \([0, N-1]\). Avec le vecteur \(\mathbf h^N = (h[0], \ldots, h[N-1])\) contenant les coefficients non nuls de la réponse impulsionnelle, la transformée de Fourier discrète \(\mathbf H^N\) de  \(\mathbf h^N\) contient
+    des échantillons de la réponse fréquentielle du filtre :
+    \[\mathbf H^N_k = H\left(\frac{k}{N}\right) \mbox{ pour } 0 \leq k < N.\]
+  							       </p>
+  <p>
+    L'échantillonnage de la réponse fréquentielle étant trop grossier pour un bon tracé de la réponse fréquentielle, on utilise la technique de zero-padding, qui consiste à calculer la DFT du vecteur \(\mathbf h^L = (h[0], \ldots, h[N-1], 0, \ldots, 0) \) de taille \(L > N\). On a alors un échantillonage plus fin :
+      \[\mathbf H^L_k = H\left(\frac{k}{L}\right) \mbox{ pour } 0 \leq k < L.\]
+  </p>
+
+  <p>Le graphe peut ensuite être recentré autour de l'origine pour mettre en valeur la symétrie de la TFTD d'un signal réel : \(H(-\nu) = H(\nu)^\star\).</p>
+
+
+  <p>Zero-padding:   <input value="5" type="range" id="zeropad" min="5" max="50"/></p>
+  <p>FFt shift:  <input type="checkbox" id="fftshift"/></p>
+  <div id="plotir"></div>
+  <div id="plotgain"></div>
+
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="simpled3.js"></script>
+  <script src="filter_zero.js"></script>
+<script> window.MathJax.typeset()</script>
+</body>
+</html>

@@ -169,10 +169,10 @@ symbolimag = "M 0 1 L 1 0 L 0 -1 Z"
 rectt = axisdft.rectangle("rect", "", rectcorners)
 
 
-stemsigreal = axissig.line("sigreal", "\\(\\Re x[n]\\)", datasigreal)
-stemsigimag = axissig.line("sigimag", "\\(\\Im x[n]\\)", datasigimag)
-stemdftreal = axisdft.stem("dftreal", "\\(\\Re X[k]\\)", datadftreal, updatedatareal, symbolreal)
-stemdftimag = axisdft.stem("dftimag", "\\(\\Im X[k]\\)", datadftimag, updatedataimag, symbolimag)
+stemsigreal = axissig.line("sigreal", "\\(\\Re x(t)\\)", datasigreal)
+stemsigimag = axissig.line("sigimag", "\\(\\Im x(t)\\)", datasigimag)
+stemdftreal = axisdft.stem("dftreal", "\\(\\Re X_n\\)", datadftreal, updatedatareal, symbolreal)
+stemdftimag = axisdft.stem("dftimag", "\\(\\Im X_n\\)", datadftimag, updatedataimag, symbolimag)
 
 
 

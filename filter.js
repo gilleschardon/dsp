@@ -242,10 +242,10 @@ function reset()
 
 stemir = axisir.stem("ir", "IR", datair, drag_ir)
 
-stemx = axissig.stem("in", "x[n]", datax)
-stemy = axissig.stem("out", "y[n]", datay)
-linexc = axissig.line("in", "x[n]", dataxc)
-lineyc = axissig.line("out", "x[n]", datayc)
+stemx = axissig.stem("in", "\\(x[n]\\)", datax)
+stemy = axissig.stem("out", "\\(y[n]\\)", datay)
+linexc = axissig.line("in", "", dataxc)
+lineyc = axissig.line("out", "", datayc)
 
 scatgain = axisgain.scatter("gain", "Gain", datadg)
 scatphase = axisphase.scatter("phase", "Phase", datadp)

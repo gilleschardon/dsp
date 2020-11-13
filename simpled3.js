@@ -131,6 +131,9 @@ this.svg.append("clipPath")
   // voronoi on trace les cellules
   scatter(id, tag, data, drag_update=null, symbol = d3.symbol().size(1).type(d3.symbolCircle), voronoi=false) {
     var g = this.axis.append("g").attr("class", id)
+
+    if (tag != "")
+    {
     this.legend.append('path').attr("d", symbol)
       .attr('transform', "translate(20, " + (20 + this.legend_shift) +")  scale(" + 10 + ")")
       .attr("fill", "currentcolor")
@@ -139,6 +142,7 @@ this.svg.append("clipPath")
     var fo = this.legend.append("foreignObject").attr('x', '40').attr('y', (10 + this.legend_shift)).attr('width', '100').attr("height", "100")
     fo.append('xhtml:p').attr("style", "margin:0 ; vertical-align:middle").text(tag)
   this.legend_shift = this.legend_shift + 30
+}
     return new Scatter(g, data, this.scalex, this.scaley, this.xrange, this.yrange, drag_update, symbol, voronoi)
 
 
@@ -150,7 +154,9 @@ this.svg.append("clipPath")
   line(id, tag, data) {
     var g = this.axis.append("g").attr("class", id).attr("clip-path", "url(" + this.parent + "clip)")
 
-    this.legend.append('line')
+    if (tag != "")
+    {
+        this.legend.append('line')
 
 	.attr("x1", -10)
 	.attr("y1", 0)
@@ -164,12 +170,7 @@ this.svg.append("clipPath")
     fo.append('xhtml:p').attr("style", "margin:0 ; vertical-align:middle").text(tag)
 
   this.legend_shift = this.legend_shift + 30
-
-
-
-
-
-
+}
 
     return new Line(g, data, this.scalex, this.scaley)
   }

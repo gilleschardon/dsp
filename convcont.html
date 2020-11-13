@@ -6,7 +6,7 @@
 
   <meta charset="utf-8">
 
-  <title>Test d3</title>
+  <title>Convolution en temps continu</title>
 
 
   <link rel="stylesheet" href="styles.css">
@@ -58,6 +58,14 @@
 </head>
 
 <body>
+
+  <h1>Convolution en temps continu</h1>
+
+  <p>
+  La convolution \( z = x \star y \) entre deux signaux à temps continu \(x\) et \(y\)  est définie par :
+  \[z(t) = \int_{\mathbf R}  x(t -\tau ) y(\tau) d\tau\]
+  pour \( t \in \mathbf{R} \).</p>
+
   <select id="in1"></select>
 
   <select id="in2"></select>

@@ -101,9 +101,9 @@ symbolimag = "M 0 1 L 1 0 L 0 -1 Z"
 
 
 
-stemsigreal = axissig.stem("sigreal", "\\(\\Re x[n]\\)", datasigreal, (i, x, y) => updatesig(i, x, y, datasigreal), symbolreal)
-stemsigimag = axissig.stem("sigimag", "\\(\\Im x[n]\\)", datasigimag, (i, x, y) => updatesig(i, x, y, datasigimag), symbolimag)
-stemdftreal = axisdft.stem("dftreal", "\\(\\Re X[k]\\)", datadftreal, (i, x, y) => updatefreq(i, x, y, datadftreal), symbolreal)
-stemdftimag = axisdft.stem("dftimag", "\\(\\Im X[k]\\)", datadftimag, (i, x, y) => updatefreq(i, x, y, datadftimag), symbolimag)
+stemsigreal = axissig.stem("sigreal", "\\(\\Re x_n\\)", datasigreal, (i, x, y) => updatesig(i, x, y, datasigreal), symbolreal)
+stemsigimag = axissig.stem("sigimag", "\\(\\Im x_n\\)", datasigimag, (i, x, y) => updatesig(i, x, y, datasigimag), symbolimag)
+stemdftreal = axisdft.stem("dftreal", "\\(\\Re X_k\\)", datadftreal, (i, x, y) => updatefreq(i, x, y, datadftreal), symbolreal)
+stemdftimag = axisdft.stem("dftimag", "\\(\\Im X_k\\)", datadftimag, (i, x, y) => updatefreq(i, x, y, datadftimag), symbolimag)
 
 d3.select('#reset').on("click", reset)

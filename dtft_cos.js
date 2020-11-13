@@ -95,10 +95,10 @@ function update_freq()
 symbolreal = "M 0 0 L 1 2 L -1 2 Z"
 //symbolimag = "M 0 1 L 1 0 L 0 -1 Z"
 
-scatterD = axissig.scatter("sigD", "\\(\\\cos(2\\pi \\nu n)\\)", datasigD, null)
+scatterD = axissig.scatter("sigD", "\\(x[n]\\)", datasigD, null)
 area = axisdft.area("area", "", {x:[-0.5, 0.5], y:[10, 10]})
 
-stemsigreal = axissig.line("sigreal", "\\(\\\cos(2\\pi \\nu t)\\)", datasigreal)
+stemsigreal = axissig.line("sigreal", "\\(x_c(t)\\)", datasigreal)
 //stemsigimag = axissig.line("sigimag", "\\(\\Im x[n]\\)", datasigimag)
 stemPR = axisdft.stem("PR", "\\(X(\\nu)\\)", dataPR, null, symbolreal)
 //stemPI = axisdft.stem("PI", "\\(\\Im X[k]\\)", dataPI, null, symbolimag)

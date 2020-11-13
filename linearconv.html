@@ -6,7 +6,7 @@
 
   <meta charset="utf-8">
 
-  <title>Test d3</title>
+  <title>Convolution linéaire</title>
 
 
   <link rel="stylesheet" href="styles.css">
@@ -53,7 +53,15 @@
 </head>
 
 <body>
-  <p>blablabla \(zzz\)</p>
+  <h1>Convolution linéaire</h1>
+
+  <p>On calcule ici la convolution de deux signaux causaux de supports finis. Les coefficient nuls ne sont pas représentés.<p>
+
+    <p>La convolution est définie par l'équation suivante :
+      \[(x \star y)[n]  = \sum_{k\in\mathbf Z} x[k] y[n-k]\]
+    </p>
+
+
   <input value="Reset" type="submit" id="reset"/>
   <div id="plotx"></div>
   <div id="ploty"></div>

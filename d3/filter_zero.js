@@ -12,8 +12,8 @@ var margins = {
 
 var margins2 = {
   left: 50,
-  right: 20,
-  bottom: 10,
+  right: 200,
+  bottom: 40,
   top: 10
 };
 
@@ -32,21 +32,18 @@ document.getElementById("zeropad").value=L
 
 var Lmax = 50
 
-var t = [...Array(2*L).keys()].map(t => (t - L))
-
-var x = Array(t.length).fill(0)
-var y = Array(t.length).fill(0)
 
 R = 10
-var r = Array(t.length).fill(L)
+var r = Array(L).fill(R)
 
 
 Nfreq = 1000
 
-var nu = [...Array(Nfreq).keys()].map(t => (t/Nfreq))
+var nu = [...Array(Nfreq).keys()].map(t => (t/Nfreq*1.5-0.5))
 var Hr = Array(Nfreq).fill(0)
 var Hi = Array(Nfreq).fill(0)
 
+var fftshift = false;
 for (var i = 0; i < nu.length; i++)
   {
              Hr[i] = ir.reduce((a, hh, idx) => a + Math.cos( - 2 * Math.PI * nu[i] * idx) * hh, 0)
@@ -78,30 +75,41 @@ Lzero = L
 
 function update_data()
 {
+  shift = fftshift ? Math.floor(Lzero/2) : 0
+
   datair.x = [...Array(+Lzero).keys()]
   datair.r = Array(+Lzero).fill(R)
   datair.y = Array(+Lzero).fill(0)
   datair.y.splice(0, L, ...ir)
 
-  datadft.x = [...Array(+Lzero).keys()].map((t) => (t/Lzero))
+  datadft.x = [...Array(+Lzero).keys()].map((t) => ((t - shift)/Lzero))
   datadft.r = Array(+Lzero).fill(R)
   datadft.y = Array(+Lzero).fill(0)
 
   for (var i = 0; i < Lzero; i++)
     {
 
-      RR = ir.reduce((a, hh, idx) => a + Math.cos( - 2 * Math.PI * i * idx / Lzero) * hh, 0)
-      II = ir.reduce((a, hh, idx) => a + Math.sin( - 2 * Math.PI * i * idx / Lzero) * hh, 0)
+      RR = ir.reduce((a, hh, idx) => a + Math.cos( - 2 * Math.PI * (i-shift) * (idx/ Lzero)) * hh, 0)
+      II = ir.reduce((a, hh, idx) => a + Math.sin( - 2 * Math.PI * (i-shift) * (idx/ Lzero)) * hh, 0)
 
       datadft.y[i] = Math.sqrt(RR**2 + II**2)
 
     }
 
+
+
 }
 
 function update_zero()
 {
+
   Lzero = this.value
+  update()
+}
+
+function update_shift()
+{
+  fftshift = this.checked;
   update()
 }
 
@@ -116,13 +124,14 @@ function update()
 }
 
 
-stemir = axisir.stem("ir", "ir", datair)
-linegain = axisgain.line("gain", "gain", datagain)
-dftscatter = axisgain.scatter("dft", "dft", datadft)
+stemir = axisir.stem("ir", "IR", datair)
+linegain = axisgain.line("gain", "Gain", datagain)
+dftscatter = axisgain.scatter("dft", "DFT", datadft)
 
 
 
 
 d3.select('#zeropad').on("input", update_zero)
+d3.select('#fftshift').on("input", update_shift)
 
 update()

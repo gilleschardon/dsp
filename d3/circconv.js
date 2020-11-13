@@ -13,7 +13,7 @@ var t = [...Array(L).keys()]
 var x = Array(L).fill(0)
 var y = Array(L).fill(0)
 var z = Array(L).fill(0)
-var r = Array(L).fill(5)
+var r = Array(L).fill(10)
 
 datax = {x: t, y:x, r: r}
 datay = {x: t, y:y, r: r}

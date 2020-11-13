@@ -17,11 +17,20 @@ class Axis {
   // xrange yrange arrays
   constructor(parent, width, height, margin, xrange, yrange, ntickx, nticky)
   {
+	this.parent = parent
     this.svg = this.axis = d3.select(parent).append("svg")
     // svg contenant les éléments
     this.svg.attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
+this.svg.append("clipPath")
+	.attr("id", parent.substring(1) + "clip")
+		.append("rect")
+		.attr("x", margin.left)
+		.attr("y", margin.top)
+		.attr("width", width)
+		.attr("height", height)
 
 // échelles pour le tracé
     this.scalex = d3
@@ -101,9 +110,11 @@ class Axis {
 // drag_update pour mettre à jour les données (et appeler l'update)
 // symbol
 // rotate si on tourne pour les données négatives (pour les diracs)
-  stem(id, tag, data, drag_update = null, symbol = d3.symbol().size(2).type(d3.symbolCircle), rotate = false) {
-    var g = this.axis.append("g").attr("class", id)
+  stem(id, tag, data, drag_update = null, symbol = d3.symbol().size(1).type(d3.symbolCircle), rotate = false) {
+    var g = this.axis.append("g").attr("class", id).attr("clip-path", "url(" + this.parent + "clip)")
 
+    if (tag != "")
+    {
     this.legend.append('path').attr("d", symbol)
       .attr('transform', "translate(20, " + (20 + this.legend_shift) +")  scale(" + 10 + ")")
       .attr("fill", "currentcolor")
@@ -113,21 +124,60 @@ class Axis {
     fo.append('xhtml:p').attr("style", "margin:0 ; vertical-align:middle").text(tag)
 
   this.legend_shift = this.legend_shift + 30
+}
     return new Stem(g, data, this.scalex, this.scaley, this.yrange, drag_update, symbol, rotate)
   }
 
   // voronoi on trace les cellules
-  scatter(id, tag, data, drag_update=null, voronoi=false) {
+  scatter(id, tag, data, drag_update=null, symbol = d3.symbol().size(1).type(d3.symbolCircle), voronoi=false) {
     var g = this.axis.append("g").attr("class", id)
-    return new Scatter(g, data, this.scalex, this.scaley, this.xrange, this.yrange, drag_update, voronoi)
+    this.legend.append('path').attr("d", symbol)
+      .attr('transform', "translate(20, " + (20 + this.legend_shift) +")  scale(" + 10 + ")")
+      .attr("fill", "currentcolor")
+      .attr("class", id)
+
+    var fo = this.legend.append("foreignObject").attr('x', '40').attr('y', (10 + this.legend_shift)).attr('width', '100').attr("height", "100")
+    fo.append('xhtml:p').attr("style", "margin:0 ; vertical-align:middle").text(tag)
+  this.legend_shift = this.legend_shift + 30
+    return new Scatter(g, data, this.scalex, this.scaley, this.xrange, this.yrange, drag_update, symbol, voronoi)
+
+
+
+
+
+
   }
   line(id, tag, data) {
-    var g = this.axis.append("g").attr("class", id)
+    var g = this.axis.append("g").attr("class", id).attr("clip-path", "url(" + this.parent + "clip)")
+
+    this.legend.append('line')
+
+	.attr("x1", -10)
+	.attr("y1", 0)
+	.attr("x2", 10)
+	.attr("y2", 0)
+      .attr('transform', "translate(20, " + (20 + this.legend_shift) +")")
+      .attr("stroke", "currentcolor")
+      .attr("class", id + " line")
+
+    var fo = this.legend.append("foreignObject").attr('x', '40').attr('y', (10 + this.legend_shift)).attr('width', '100').attr("height", "100")
+    fo.append('xhtml:p').attr("style", "margin:0 ; vertical-align:middle").text(tag)
+
+  this.legend_shift = this.legend_shift + 30
+
+
+
+
+
+
+
     return new Line(g, data, this.scalex, this.scaley)
   }
-  area(id, data) {
-    var g = this.axis.append("g").attr("class", id)
+  area(id, tag, data) {
+    var g = this.axis.append("g").attr("class", id).attr("clip-path", "url(" + this.parent + "clip)")
     return new Area(g, data, this.scalex, this.scaley)
+
+
   }
 
   lines(id, tag, data) {
@@ -198,11 +248,17 @@ class Stem{
   update() {
     const Z = d3.zip(this.data.x, this.data.y, this.data.r)
 
-    this.g1.selectAll("path").data(Z)
-      .attr('transform', (d, i) => ("translate(" + this.scalex(d[0]) + ", " + this.scaley(d[1]) + ") scale(" + d[2] + ")"  +((this.rotate && d[1] < 0) ? " rotate(180)":"")))
+    const selp = this.g1.selectAll("path").data(Z)
 
-    this.g2.selectAll("line").data(Z)
-    .attr("x1", (d) => this.scalex(d[0]))
+    selp.exit().remove()
+    selp.enter().append("path").attr("d", this.symbol).attr("fill", "currentcolor").attr('transform', (d, i) => ("translate(" + this.scalex(d[0]) + ", " + this.scaley(d[1]) + ") scale(" + d[2] + ")"  +((this.rotate && d[1] < 0) ? " rotate(180)":"")))
+
+    selp.attr('transform', (d, i) => ("translate(" + this.scalex(d[0]) + ", " + this.scaley(d[1]) + ") scale(" + d[2] + ")"  +((this.rotate && d[1] < 0) ? " rotate(180)":"")))
+
+    const sell = this.g2.selectAll("line").data(Z)
+    sell.exit().remove()
+    sell.enter().append("line").attr("stroke", "currentcolor")
+    sell.attr("x1", (d) => this.scalex(d[0]))
     .attr("x2", (d) => this.scalex(d[0]))
     .attr("y1", this.scaley(0))
     .attr("y2", (d) => this.scaley(d[1]))
@@ -216,7 +272,7 @@ class Stem{
 }
 
 class Scatter{
-  constructor(g, data, scalex, scaley, xrange, yrange, drag_update, voronoi){
+  constructor(g, data, scalex, scaley, xrange, yrange, drag_update, symbol, voronoi){
 
     this.g = g
     // groupes svg pour les marqueurs et les stems
@@ -240,9 +296,9 @@ class Scatter{
 
     // création des marqueurs
 
-    this.symbol = d3.symbol().size(1).type(d3.symbolCircle)
+    this.symbol = symbol
 
-     this.g1.selectAll("path").data(Z).enter().append("path").attr("d", this.symbol).attr('fill', 'red')
+     this.g1.selectAll("path").data(Z).enter().append("path").attr("d", this.symbol)
      .attr('transform', (d, i) => ("translate(" + this.scalex(d[0]) + ", " + this.scaley(d[1]) + ") scale(" + d[2] + ")")).attr("fill", "currentcolor")
 
      if (this.voronoi)
@@ -270,7 +326,10 @@ class Scatter{
   update() {
 
     const Z = d3.zip(this.data.x, this.data.y, this.data.r)
-    this.g1.selectAll("path").data(Z).attr('transform', (d, i) => ("translate(" + this.scalex(d[0]) + ", " + this.scaley(d[1]) + ") scale(" + d[2] + ")"))
+    const sel = this.g1.selectAll("path").data(Z)
+    sel.exit().remove()
+    sel.enter().append("path").attr("d", this.symbol).attr("fill", "currentcolor").attr('transform', (d, i) => ("translate(" + this.scalex(d[0]) + ", " + this.scaley(d[1]) + ") scale(" + d[2] + ")"))
+    sel.attr('transform', (d, i) => ("translate(" + this.scalex(d[0]) + ", " + this.scaley(d[1]) + ") scale(" + d[2] + ")"))
 
     if (this.voronoi)
     {     this.voronoi = d3.Delaunay.from(Z, d => this.scalex(d[0]),  d => this.scaley(d[1]))

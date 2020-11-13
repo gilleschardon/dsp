@@ -50,7 +50,7 @@ params = {
   {
     type: "range",
     value : 0.5,
-    max : 2,
+    max : 5,
     min : 0.1,
     name : "Width",
   },
@@ -61,6 +61,14 @@ params = {
     max : 2,
     min : -2,
     name : "Center"
+  },
+  freq :
+  {
+    type: "range",
+    value : 0,
+    max : 6,
+    min : -6,
+    name : "Frequency"
   }
 }
 
@@ -87,19 +95,23 @@ for (param of Object.keys(params))
 
 
 
-function sinc(t)
-{
-  return (t == 0 ? 1 :  Math.sin(t)/t)
-}
 
 function update()
 {
+  center = params.center.value
+  freq = params.freq.value
+  width = params.width.value
 
-  datasigreal.y = datasigreal.x.map((t) => (Math.abs(t - params.center.value) > params.width.value ? 0 : 1))
+  datasigreal.y = datasigreal.x.map((t) => (Math.exp( - Math.PI * ((t - center)/width)**2) * Math.cos(2 * Math.PI * freq * (t-center))))
+  fourier1real = datafourierreal.x.map((f) => Math.cos(- 2 * Math.PI * center * (f - 0*freq)))
+  fourier1imag = datafourierreal.x.map((f) => Math.sin(- 2 * Math.PI * center * (f - 0*freq)))
+  fourier1exp = datafourierreal.x.map((f) => Math.exp(- Math.PI * width**2 * (f - freq)**2))
+  fourier2real = datafourierreal.x.map((f) => Math.cos(- 2 * Math.PI * center * (f + 0*freq)))
+  fourier2imag = datafourierreal.x.map((f) => Math.sin(- 2 * Math.PI * center * (f + 0*freq)))
+  fourier2exp = datafourierreal.x.map((f) => Math.exp(- Math.PI * width**2 * (f + freq)**2))
 
-  datafourierreal.y = datasigreal.x.map((f) => 2 * params.width.value * sinc(2 * Math.PI * params.width.value * f) * Math.cos(2 * Math.PI * params.center.value * f))
-  datafourierimag.y = datasigimag.x.map((f) => 2 * params.width.value * sinc(2 * Math.PI * params.width.value * f) * Math.sin(- 2 * Math.PI * params.center.value * f))
-
+  datafourierreal.y = fourier1exp.map((u, idx) => u * (fourier1real[idx]) + fourier2exp[idx] * fourier2real[idx])
+  datafourierimag.y = fourier1exp.map((u, idx) => u * (fourier1imag[idx]) + fourier2exp[idx] * fourier2imag[idx])
 
   sigreal.update()
   sigimag.update()

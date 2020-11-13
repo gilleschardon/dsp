@@ -6,20 +6,26 @@ var margins = {
   top: 10
 };
 
-var L = 8
-var Lc = 2*L-1
+var L1 = 8
+var L2 = 10
+var Lc = L1 + L2 - 1
 
-var t = [...Array(L).keys()]
+var t1 = [...Array(L1).keys()]
+var t2 = [...Array(L2).keys()]
+
 var tc = [...Array(Lc).keys()]
 
-var x = Array(L).fill(0)
-var y = Array(L).fill(0)
-var z = Array(Lc).fill(0)
-var r = Array(L).fill(5)
-var rc = Array(Lc).fill(5)
+var x = Array(L1).fill(0)
+var y = Array(L2).fill(0)
 
-datax = {x: t, y:x, r: r}
-datay = {x: t, y:y, r: r}
+var z = Array(Lc).fill(0)
+var r1 = Array(L1).fill(10)
+var r2 = Array(L2).fill(10)
+
+var rc = Array(Lc).fill(10)
+
+datax = {x: t1, y:x, r: r2}
+datay = {x: t2, y:y, r: r2}
 dataz = {x: tc, y:z, r: rc}
 
 xrange = [-0.5,Lc - 0.5];
@@ -38,9 +44,9 @@ axisz = new Axis("#plotz", 700, 300, margins, xrange, yrange2, ntickx, nticky*2)
 function update_data()
 {
   dataz.y.fill(0)
-  for (var k = 0 ; k < L ; k++)
+  for (var k = 0 ; k < L1 ; k++)
   {
-       for (var l = 0 ; l < L ; l++)
+       for (var l = 0 ; l < L2  ; l++)
        {
                dataz.y[(k+l)] = dataz.y[(k+l)] + datax.y[k] * datay.y[l]
       }

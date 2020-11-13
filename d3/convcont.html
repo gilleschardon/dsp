@@ -17,14 +17,18 @@
   .ir  {
     color: #f66;
   }
-  .in   {color: blue;}
-  .out   {color: red;}
-  .gain {color: blue}
-  .phase {color: red}
-  .dft {color: red}
+
+  #plotin2, #plotprod, #plotout, #plotin1
+  {
+    display: inline-block
+  }
+  .in1   {color: blue;}
+  .in2   {color: red;}
+  .out {color: green}
+  .prod {color: black}
+  .current {color: red}
 
   .line {stroke-width: 2px}
-  .in .line, .out .line {opacity: 0.2}
 
   .axis {
     opacity: 1;
@@ -50,23 +54,26 @@
     stroke: #999;
   }
 
-  #plotgain, #plotphase
-  {
-    display: inline-block;
-  }
-
   </style>
 </head>
 
 <body>
-  <p>Zero-padding:   <input value="5" type="range" id="zeropad" min="5" max="50"/></p>
-  <p>FFt shift:  <input type="checkbox" id="fftshift"/></p>
-  <div id="plotir"></div>
-  <div id="plotgain"></div>
+  <select id="in1"></select>
 
+  <select id="in2"></select>
+
+  <input value="0" type="range" id="delay" min="-500" max="500"/>
+  <div>
+  <div id="plotin1"></div>
+  <div id="plotin2"></div>
+</div>
+<div>
+  <div id="plotprod"></div>
+  <div id="plotout"></div>
+</div>
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="simpled3.js"></script>
-  <script src="filter_zero.js"></script>
+  <script src="convcont.js"></script>
 <script> window.MathJax.typeset()</script>
 </body>
 </html>

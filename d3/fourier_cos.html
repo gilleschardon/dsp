@@ -14,17 +14,12 @@
   <style>
 
 
-  .ir  {
-    color: #f66;
-  }
-  .in   {color: blue;}
-  .out   {color: red;}
-  .gain {color: blue}
-  .phase {color: red}
-  .dft {color: red}
+  .sigreal   {color: blue;}
+  .sigimag   {color: red;}
+  .PR, .NR {color: blue}
+  .PI, .NI {color: red}
 
-  .line {stroke-width: 2px}
-  .in .line, .out .line {opacity: 0.2}
+  .line {stroke-width: 2px }
 
   .axis {
     opacity: 1;
@@ -50,23 +45,23 @@
     stroke: #999;
   }
 
-  #plotgain, #plotphase
-  {
-    display: inline-block;
-  }
+  .rect {color: green; opacity: 0.2}
+
 
   </style>
 </head>
 
 <body>
-  <p>Zero-padding:   <input value="5" type="range" id="zeropad" min="5" max="50"/></p>
-  <p>FFt shift:  <input type="checkbox" id="fftshift"/></p>
-  <div id="plotir"></div>
-  <div id="plotgain"></div>
+
+
+
+
+  <div id="plotsig"></div>
+  <div id="plotdft"></div>
 
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="simpled3.js"></script>
-  <script src="filter_zero.js"></script>
+  <script src="fourier_sine.js"></script>
 <script> window.MathJax.typeset()</script>
 </body>
 </html>

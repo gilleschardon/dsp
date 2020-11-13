@@ -126,19 +126,24 @@ axisx = new Axis("#plottime", 800, 300, margins, xrange, yrange)
 axisy1 = new Axis("#plotfrequency1", 800, 300, margins, nurange, yrange)
 axisy2 = new Axis("#plotfrequency2", 800, 300, margins, nurange, yrange)
 
-axisy2.rectangle("domainnu", -0.5, 0, 1, 1)
+datarect =
+{
+  x: [0.5], y: [0], width: [1], height:[1]
+}
 
-linex = axisx.line('x', datax, false)
-linexs = axisx.line('xs', dataxs, false)
+axisy2.rectangle("domainnu", "domainnu", datarect)
 
-samplesxd = axisx.scatter("xd", dataxd, false, null)
-samplesxds = axisx.scatter("xds", dataxds, false, null)
+linex = axisx.line('x', 'x', datax)
+linexs = axisx.line('xs', 'xs', dataxs)
 
-stemnup = axisy1.stem("nup", datanup, false, null, d3.symbolTriangle, true)
-stemnum = axisy1.stem("num", datanum, false, null, d3.symbolTriangle, true)
+samplesxd = axisx.scatter("xd", "xd", dataxd)
+samplesxds = axisx.scatter("xds", "xds", dataxds)
 
-stemnup2 = axisy2.stem("nup2", datanup2, false, null, d3.symbolTriangle, true)
-stemnum2 = axisy2.stem("num2", datanum2, false, null, d3.symbolTriangle, true)
+stemnup = axisy1.stem("nup", "nup",datanup, false, null, d3.symbolTriangle, true)
+stemnum = axisy1.stem("num", "num", datanum, false, null, d3.symbolTriangle, true)
+
+stemnup2 = axisy2.stem("nup2", "nup2", datanup2, false, null, d3.symbolTriangle, true)
+stemnum2 = axisy2.stem("num2", "nup2", datanum2, false, null, d3.symbolTriangle, true)
 
 
 

@@ -14,12 +14,16 @@
   <style>
 
 
-  .sigreal   {color: blue;}
-  .sigimag   {color: red;}
-  .PR, .NR {color: blue}
-  .PI, .NI {color: red}
+  .ir  {
+    color: #f66;
+  }
+  .in   {color: blue;}
+  .out   {color: red;}
+  .gain {color: blue}
+  .phase {color: red}
 
-  .line {stroke-width: 2px }
+  .line {stroke-width: 2px}
+  .in .line, .out .line {opacity: 0.2}
 
   .axis {
     opacity: 1;
@@ -45,23 +49,25 @@
     stroke: #999;
   }
 
-  .rect {color: green; opacity: 0.2}
-
+  #plotgain, #plotphase
+  {
+    display: inline-block;
+  }
 
   </style>
 </head>
 
 <body>
+  <select id="filter"></select>
 
-
-
-
+  <input value="10" type="range" id="freq" min="0" max="100"/>
+  <div id="plotir"></div>
   <div id="plotsig"></div>
-  <div id="plotdft"></div>
+  <div id="plotgain"></div><div id="plotphase"></div>
 
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="simpled3.js"></script>
-  <script src="fourier_sine.js"></script>
+  <script src="filter.js"></script>
 <script> window.MathJax.typeset()</script>
 </body>
 </html>

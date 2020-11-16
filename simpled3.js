@@ -223,6 +223,7 @@ class Stem{
 
     // création des marqueurs
 
+
     this.g1.selectAll("path").data(Z).enter()
     .append("path")
       .attr("d", this.symbol)
@@ -249,7 +250,7 @@ class Stem{
   update() {
     const Z = d3.zip(this.data.x, this.data.y, this.data.r)
 
-    const selp = this.g1.selectAll("path").data(Z)
+    var selp = this.g1.selectAll("path").data(Z)
 
     selp.exit().remove()
     selp.enter().append("path").attr("d", this.symbol).attr("fill", "currentcolor").attr('transform', (d, i) => ("translate(" + this.scalex(d[0]) + ", " + this.scaley(d[1]) + ") scale(" + d[2] + ")"  +((this.rotate && d[1] < 0) ? " rotate(180)":"")))

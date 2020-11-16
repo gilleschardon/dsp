@@ -42,8 +42,8 @@ yrangefourier = [-2, 2]
 ntickx = 10
 nticky = 5
 
-axissig = new Axis("#plotsig", 1500, 400, margins, sigrange, yrangesig, ntickx, nticky)
-axisfourier = new Axis("#plotfourier", 1500, 400, margins, fourierrange, yrangefourier, ntickx, nticky)
+axissig = new Axis("#plotsig", 600, 200, margins, sigrange, yrangesig, ntickx, nticky)
+axisfourier = new Axis("#plotfourier", 600, 200, margins, fourierrange, yrangefourier, ntickx, nticky)
 
 params = {
   width :

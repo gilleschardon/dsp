@@ -1,0 +1,69 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <meta charset="utf-8">
+
+  <title>Transformée de Fourier</title>
+
+
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+
+
+  .yf   {color: blue;}
+  .yb   {color: red;}
+  .ycn {color: green}
+  .yrk4 {color: magenta}
+
+  .line {stroke-width: 2px }
+
+  .axis {
+    opacity: 1;
+    stroke-width: 1;
+  }
+  .axis line {
+    opacity: 1;
+    stroke-width: 1;
+  }
+  .xgrid, .ygrid  {
+    opacity: 1;
+    stroke-width: 2px;
+    stroke: #eee;
+  }
+
+  .domain, .tick line {
+    stroke: #aaa;
+  }
+
+  .frame {
+    opacity: 1;
+    stroke-width: 2px;
+    stroke: #999;
+  }
+
+
+
+  </style>
+</head>
+
+<body>
+<h1>Numerical ODEs: Euler and friends</h1>
+
+  <div id="params"><p><input value="0" type="range" id="resol" min="0" max="200"/><p>
+  </div>
+  <!-- <p>Width<input class="slider" type="range" min="0" max="100" value="50" id="width"></input></p>
+  <p>Center<input class="slider" type="range" min="0" max="100" value="50" id="center"></input></p> -->
+
+  <div id="plotode"></div>
+  <div id="ploterr"></div>
+
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="simpled3.js"></script>
+  <script src="ode.js"></script>
+<script> window.MathJax.typeset()</script>
+</body>
+</html>

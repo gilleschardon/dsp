@@ -120,7 +120,7 @@ this.svg.append("clipPath")
       .attr("fill", "currentcolor")
       .attr("class", id)
 
-    var fo = this.legend.append("foreignObject").attr('x', '40').attr('y', (10 + this.legend_shift)).attr('width', '100').attr("height", "100")
+    var fo = this.legend.append("foreignObject").attr('x', '40').attr('y', (10 + this.legend_shift)).attr('width', '200').attr("height", "100")
     fo.append('xhtml:p').attr("style", "margin:0 ; vertical-align:middle").text(tag)
 
   this.legend_shift = this.legend_shift + 30
@@ -130,7 +130,7 @@ this.svg.append("clipPath")
 
   // voronoi on trace les cellules
   scatter(id, tag, data, drag_update=null, symbol = d3.symbol().size(1).type(d3.symbolCircle), voronoi=false) {
-    var g = this.axis.append("g").attr("class", id)
+    var g = this.axis.append("g").attr("class", id).attr("clip-path", "url(" + this.parent + "clip)")
 
     if (tag != "")
     {
@@ -139,7 +139,7 @@ this.svg.append("clipPath")
       .attr("fill", "currentcolor")
       .attr("class", id)
 
-    var fo = this.legend.append("foreignObject").attr('x', '40').attr('y', (10 + this.legend_shift)).attr('width', '100').attr("height", "100")
+    var fo = this.legend.append("foreignObject").attr('x', '40').attr('y', (10 + this.legend_shift)).attr('width', '200').attr("height", "100")
     fo.append('xhtml:p').attr("style", "margin:0 ; vertical-align:middle").text(tag)
   this.legend_shift = this.legend_shift + 30
 }
@@ -166,7 +166,7 @@ this.svg.append("clipPath")
       .attr("stroke", "currentcolor")
       .attr("class", id + " line")
 
-    var fo = this.legend.append("foreignObject").attr('x', '40').attr('y', (10 + this.legend_shift)).attr('width', '100').attr("height", "100")
+    var fo = this.legend.append("foreignObject").attr('x', '40').attr('y', (10 + this.legend_shift)).attr('width', '200').attr("height", "100")
     fo.append('xhtml:p').attr("style", "margin:0 ; vertical-align:middle").text(tag)
 
   this.legend_shift = this.legend_shift + 30

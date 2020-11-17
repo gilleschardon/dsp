@@ -35,9 +35,9 @@ yrange2 = [-4.5, 4.5]
 ntickx = 20
 nticky = 5
 
-axisx = new Axis("#plotx", 700, 150, margins, xrange, yrange, ntickx, nticky)
-axisy = new Axis("#ploty", 700, 150, margins, xrange, yrange, ntickx, nticky)
-axisz = new Axis("#plotz", 700, 300, margins, xrange, yrange2, ntickx, nticky*2)
+axisx = new Axis("#plotx", "x", 700, 150, margins, xrange, yrange, ntickx, nticky)
+axisy = new Axis("#ploty", "y", 700, 150, margins, xrange, yrange, ntickx, nticky)
+axisz = new Axis("#plotz", "z", 700, 300, margins, xrange, yrange2, ntickx, nticky*2)
 
 
 

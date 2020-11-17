@@ -67,9 +67,9 @@ Hrange = [-0.1,5.1]
 ntickx = 20
 nticky = 5
 
-axisir = new Axis("#plotir", 1000, 200, margins, xrange, yrange, ntickx, nticky)
+axisir = new Axis("#plotir", "ir", 1000, 200, margins, xrange, yrange, ntickx, nticky)
 
-axisgain = new Axis("#plotgain", 1000, 200, margins2, nurange, Hrange, ntickx, nticky)
+axisgain = new Axis("#plotgain", "gain", 1000, 200, margins2, nurange, Hrange, ntickx, nticky)
 
 Lzero = L
 

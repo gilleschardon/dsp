@@ -1,0 +1,74 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <meta charset="utf-8">
+
+  <title>Transformée de Fourier</title>
+
+
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+
+
+  .IC1  {color: blue;}
+  .IC2  {color: red;}
+  .IC13  {color: blue;opacity:0.2}
+  .IC23  {color: red; opacity:0.2}
+  .line {stroke-width: 2px }
+
+  #plotlorenz {display: inline-block}
+  #plotlorenz > svg{display: block}
+
+  #plot3D {display: inline-block}
+
+  .axis {
+    opacity: 1;
+    stroke-width: 1;
+  }
+  .axis line {
+    opacity: 1;
+    stroke-width: 1;
+  }
+  .xgrid, .ygrid  {
+    opacity: 1;
+    stroke-width: 2px;
+    stroke: #eee;
+  }
+
+  .domain, .tick line {
+    stroke: #aaa;
+  }
+
+  .frame {
+    opacity: 1;
+    stroke-width: 2px;
+    stroke: #999;
+  }
+
+
+
+  </style>
+</head>
+
+<body>
+<h1>Numerical ODEs: Euler and friends</h1>
+
+  <div id="params"><p><button id="step">Step</p><p>
+  </div>
+  <!-- <p>Width<input class="slider" type="range" min="0" max="100" value="50" id="width"></input></p>
+  <p>Center<input class="slider" type="range" min="0" max="100" value="50" id="center"></input></p> -->
+
+  <div id="plotlorenz"></div>
+  <div id="plot3D"></div>
+
+
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="simpled3.js"></script>
+  <script src="lorenz.js"></script>
+<script> window.MathJax.typeset()</script>
+</body>
+</html>

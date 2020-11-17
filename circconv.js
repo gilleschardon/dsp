@@ -23,9 +23,9 @@ xrange = [-0.5,L-0.5];
 yrange = [-2, 2]
 yrange2 = [-5, 5]
 
-axisx = new Axis("#plotx", 700, 150, margins, xrange, yrange)
-axisy = new Axis("#ploty", 700, 150, margins, xrange, yrange)
-axisz = new Axis("#plotz", 700, 300, margins, xrange, yrange2)
+axisx = new Axis("#plotx", "axx", 700, 150, margins, xrange, yrange)
+axisy = new Axis("#ploty", "axy", 700, 150, margins, xrange, yrange)
+axisz = new Axis("#plotz", "axz", 700, 300, margins, xrange, yrange2)
 
 
 

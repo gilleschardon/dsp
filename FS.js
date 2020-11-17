@@ -47,8 +47,8 @@ rectcorners.height = [yrangedft[1] - yrangedft[0]]
 ntickx = Nfreq
 nticky = 5
 
-axissig = new Axis("#plotsig", 1200, 400, margins, sigrange, yrangesig, ntickx, nticky)
-axisdft = new Axis("#plotdft", 1200, 400, margins, FSrange, yrangedft, ntickx, nticky)
+axissig = new Axis("#plotsig", "sig", 1200, 400, margins, sigrange, yrangesig, ntickx, nticky)
+axisdft = new Axis("#plotdft", "dft", 1200, 400, margins, FSrange, yrangedft, ntickx, nticky)
 
 
 

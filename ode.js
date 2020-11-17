@@ -139,8 +139,8 @@ function update_resol()
 }
 
 
-axisode= new Axis("#plotode", 1400, 400, margins, oderange, yrange, ntickx, nticky)
-axiserr = new Axis("#plotode", 1400, 400, margins, errrange, yerrrange, ntickx, nticky)
+axisode= new Axis("#plotode", "ode", 1400, 400, margins, oderange, yrange, ntickx, nticky)
+axiserr = new Axis("#plotode", "err", 1400, 400, margins, errrange, yerrrange, ntickx, nticky)
 
 ploty = axisode.line("y", "Analytic", datay)
 plotyf = axisode.scatter("yf", "Forward", datayf)

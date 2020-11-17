@@ -13,11 +13,11 @@ yrange = [-2, 2]
  ntickx =  10
  nticky =  10
 
-axisin1 = new Axis("#plotin1", 380, 200, margins, xrange, yrange, ntickx, nticky)
+axisin1 = new Axis("#plotin1", "ax1", 380, 200, margins, xrange, yrange, ntickx, nticky)
 
-axisin2 = new Axis("#plotin2", 380, 200, margins, xrange, yrange, ntickx, nticky)
-axisprod = new Axis("#plotprod", 380, 200, margins, xrange, yrange, ntickx, nticky)
-axisout = new Axis("#plotout", 380, 200, margins, xrange, yrange, ntickx, nticky)
+axisin2 = new Axis("#plotin2", "ax2", 380, 200, margins, xrange, yrange, ntickx, nticky)
+axisprod = new Axis("#plotprod", "axprod", 380, 200, margins, xrange, yrange, ntickx, nticky)
+axisout = new Axis("#plotout", "axz", 380, 200, margins, xrange, yrange, ntickx, nticky)
 
 
 

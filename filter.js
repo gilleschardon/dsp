@@ -110,11 +110,11 @@ yrangeir = [-1.1, 1.1]
 ntickx = 20
 nticky = 5
 
-axissig = new Axis("#plotsig", 1000, 200, margins, xrange, yrange, ntickx, nticky)
-axisir = new Axis("#plotir", 1000, 200, margins, xrange, yrangeir, ntickx, nticky)
+axissig = new Axis("#plotsig", "sig", 1000, 200, margins, xrange, yrange, ntickx, nticky)
+axisir = new Axis("#plotir", "ir", 1000, 200, margins, xrange, yrangeir, ntickx, nticky)
 
-axisgain = new Axis("#plotgain", 380, 200, margins2, [-0.5,0.5], yrangegain, ntickx, nticky)
-axisphase = new Axis("#plotphase", 380, 200, margins3, [-0.5,0.5], yrangephase, ntickx, nticky)
+axisgain = new Axis("#plotgain", "gain", 380, 200, margins2, [-0.5,0.5], yrangegain, ntickx, nticky)
+axisphase = new Axis("#plotphase", "phase", 380, 200, margins3, [-0.5,0.5], yrangephase, ntickx, nticky)
 
 
 freq = document.getElementById("freq").value / document.getElementById("freq").getAttribute("max") * 0.5

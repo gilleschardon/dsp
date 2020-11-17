@@ -15,17 +15,19 @@ class Axis {
   // width, height, scalaires
   // margin left right top bottom
   // xrange yrange arrays
-  constructor(parent, width, height, margin, xrange, yrange, ntickx, nticky)
+  constructor(parent, id, width, height, margin, xrange, yrange, ntickx, nticky)
   {
 	this.parent = parent
+  this.id = id
     this.svg = this.axis = d3.select(parent).append("svg")
     // svg contenant les éléments
-    this.svg.attr("width", width + margin.left + margin.right)
+    this.svg.attr("id", id)
+            .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
 this.svg.append("clipPath")
-	.attr("id", parent.substring(1) + "clip")
+	.attr("id", id + "clip")
 		.append("rect")
 		.attr("x", margin.left)
 		.attr("y", margin.top)
@@ -111,7 +113,7 @@ this.svg.append("clipPath")
 // symbol
 // rotate si on tourne pour les données négatives (pour les diracs)
   stem(id, tag, data, drag_update = null, symbol = d3.symbol().size(1).type(d3.symbolCircle), rotate = false) {
-    var g = this.axis.append("g").attr("class", id).attr("clip-path", "url(" + this.parent + "clip)")
+    var g = this.axis.append("g").attr("class", id).attr("clip-path", "url(#" + this.id + "clip)")
 
     if (tag != "")
     {
@@ -130,7 +132,7 @@ this.svg.append("clipPath")
 
   // voronoi on trace les cellules
   scatter(id, tag, data, drag_update=null, symbol = d3.symbol().size(1).type(d3.symbolCircle), voronoi=false) {
-    var g = this.axis.append("g").attr("class", id).attr("clip-path", "url(" + this.parent + "clip)")
+    var g = this.axis.append("g").attr("class", id).attr("clip-path", "url(#" + this.id + "clip)")
 
     if (tag != "")
     {
@@ -152,7 +154,7 @@ this.svg.append("clipPath")
 
   }
   line(id, tag, data) {
-    var g = this.axis.append("g").attr("class", id).attr("clip-path", "url(" + this.parent + "clip)")
+    var g = this.axis.append("g").attr("class", id).attr("clip-path", "url(#" + this.id + "clip)")
 
     if (tag != "")
     {
@@ -175,7 +177,7 @@ this.svg.append("clipPath")
     return new Line(g, data, this.scalex, this.scaley)
   }
   area(id, tag, data) {
-    var g = this.axis.append("g").attr("class", id).attr("clip-path", "url(" + this.parent + "clip)")
+    var g = this.axis.append("g").attr("class", id).attr("clip-path", "url(" + this.id + "clip)")
     return new Area(g, data, this.scalex, this.scaley)
 
 

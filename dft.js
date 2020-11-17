@@ -38,8 +38,8 @@ yrangedft = [-2.5 * L, 2.5 * L]
 ntickx = L
 nticky = 5
 
-axissig = new Axis("#plotsig", 1000, 200, margins, xrange, yrangesig, ntickx, nticky)
-axisdft = new Axis("#plotdft", 1000, 200, margins, xrange, yrangedft, ntickx, nticky)
+axissig = new Axis("#plotsig",  "sig", 1000, 200, margins, xrange, yrangesig, ntickx, nticky)
+axisdft = new Axis("#plotdft", "dft", 1000, 200, margins, xrange, yrangedft, ntickx, nticky)
 
 
 

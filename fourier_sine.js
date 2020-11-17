@@ -38,8 +38,8 @@ yrangedft = [-1.1, 1.1]
 ntickx = 10
 nticky = 5
 
-axissig = new Axis("#plotsig", 600, 200, margins, sigrange, yrangesig, ntickx, nticky)
-axisdft = new Axis("#plotdft", 600, 200, margins, FSrange, yrangedft, ntickx, nticky)
+axissig = new Axis("#plotsig", "sig", 600, 200, margins, sigrange, yrangesig, ntickx, nticky)
+axisdft = new Axis("#plotdft", "dft", 600, 200, margins, FSrange, yrangedft, ntickx, nticky)
 
 
 

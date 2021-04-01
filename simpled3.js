@@ -4,14 +4,11 @@ function limit_interval(x, range)
   return Math.min(range[1], Math.max(range[0], x))
 }
 
-
-
-
-
 // axe et tout ce qui va avec (échelle, axes, etc.)
 // permet de créer des graphes
 class Axis {
   // parent id du contenant
+  // id du svg à créer
   // width, height, scalaires
   // margin left right top bottom
   // xrange yrange arrays
@@ -19,89 +16,97 @@ class Axis {
   {
 	this.parent = parent
   this.id = id
-    this.svg = this.axis = d3.select(parent).append("svg")
+  this.width = width
+  this.height = height
+  this.margin = margin
+
+  this.svg = d3.select(parent).append("svg")
     // svg contenant les éléments
-    this.svg.attr("id", id)
+            .attr("id", id)
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
-            .append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
-this.svg.append("clipPath")
-	.attr("id", id + "clip")
+  //clip path
+  this.svg.append("clipPath")
+	 .attr("id", id + "clip")
 		.append("rect")
-		.attr("x", margin.left)
-		.attr("y", margin.top)
-		.attr("width", width)
-		.attr("height", height)
+		  .attr("x", margin.left)
+		  .attr("y", margin.top)
+		  .attr("width", width)
+		  .attr("height", height)
 
-// échelles pour le tracé
-    this.scalex = d3
-      .scaleLinear()
-      .domain(xrange)
-      .range([margin.left, width+margin.left]);
-    this.scaley = d3
-        .scaleLinear()
-        .domain(yrange)
-        .range([height+margin.top, margin.top]);
-    this.xrange = xrange
-    this.yrange = yrange
+  // scales
+  this.xrange = xrange
+  this.yrange = yrange
 
 // axes
-    var ax = this.axis.append("g").attr("class", "axis")
+  this.scales_and_axis()
+  }
+  scales_and_axis()
+  {
+
+    this.scalex = d3
+        .scaleLinear()
+        .domain(this.xrange)
+        .range([this.margin.left, this.width+this.margin.left]);
+      this.scaley = d3
+          .scaleLinear()
+          .domain(this.yrange)
+          .range([this.height+this.margin.top, this.margin.top]);
+
+    this.ax = this.svg.append("g").attr("class", "axis")
 
     this.legend_shift = 0;
 
-    this.legend = this.axis.append("g").attr("class", "legend").attr("transform", "translate(" + (width + margin.left) + ',0)')
+    this.legend = this.svg.append("g").attr("class", "legend").attr("transform", "translate(" + (this.width + this.margin.left) + ',0)')
 
-    ax.selectAll("line.xgrid").data(this.scaley.ticks(nticky)).enter()
+    this.ax.selectAll("line.xgrid").data(this.scaley.ticks(nticky)).enter()
     .append("line")
         .attr("class", "xgrid")
-        .attr("x1", margin.left)
-        .attr("x2", width+margin.left)
+        .attr("x1", this.margin.left)
+        .attr("x2", this.width+this.margin.left)
         .attr("y1",  (d) =>  this.scaley(d))
         .attr("y2", (d) => this.scaley(d))
 
-    ax.selectAll("line.ygrid").data(this.scalex.ticks(ntickx)).enter()
+    this.ax.selectAll("line.ygrid").data(this.scalex.ticks(ntickx)).enter()
         .append("line")
             .attr("class", "ygrid")
-            .attr("y1", margin.top)
-            .attr("y2", height+margin.top)
+            .attr("y1", this.margin.top)
+            .attr("y2", this.height+this.margin.top)
             .attr("x1",  (d) =>  this.scalex(d))
             .attr("x2", (d) => this.scalex(d))
 
-    ax
+    this.ax
       .append("line")
         .attr("class", "frame")
-        .attr("y1", margin.top)
-        .attr("y2", height+margin.top)
-        .attr("x1", margin.left)
-        .attr("x2", margin.left)
-      ax.append("line")
+        .attr("y1", this.margin.top)
+        .attr("y2", this.height+this.margin.top)
+        .attr("x1", this.margin.left)
+        .attr("x2", this.margin.left)
+      this.ax.append("line")
         .attr("class", "frame")
-        .attr("y1", margin.top)
-        .attr("y2", height+margin.top)
-        .attr("x1", margin.left + width)
-        .attr("x2", margin.left + width)
-      ax.append("line")
+        .attr("y1", this.margin.top)
+        .attr("y2", this.height+this.margin.top)
+        .attr("x1", this.margin.left + this.width)
+        .attr("x2", this.margin.left + this.width)
+      this.ax.append("line")
           .attr("class", "frame")
-          .attr("y1", margin.top)
-          .attr("y2", margin.top)
-          .attr("x1", margin.left)
-          .attr("x2", margin.left + width)
-      ax.append("line")
+          .attr("y1", this.margin.top)
+          .attr("y2", this.margin.top)
+          .attr("x1", this.margin.left)
+          .attr("x2", this.margin.left + this.width)
+      this.ax.append("line")
           .attr("class", "frame")
-          .attr("y1", margin.top + height)
-          .attr("y2", height+margin.top)
-          .attr("x1", margin.left)
-          .attr("x2", margin.left + width)
+          .attr("y1", this.margin.top + this.height)
+          .attr("y2", this.height+this.margin.top)
+          .attr("x1", this.margin.left)
+          .attr("x2", this.margin.left + this.width)
 
 
-    ax.append("g").attr("transform", "translate(0," + height + ")").attr("transform", "translate(0," + this.scaley(0) + ")") // axe x au zero
+    this.ax.append("g").attr("transform", "translate(0," + this.height + ")").attr("transform", "translate(0," + this.scaley(0) + ")") // axe x au zero
       .call(d3.axisBottom(this.scalex).ticks(ntickx).tickFormat(d3.format("")))
-    ax.append("g").attr("transform", "translate(" + width + ",0)").attr("transform", "translate(" + this.scalex(0) + ",0)") // axe x au zero
+    this.ax.append("g").attr("transform", "translate(" + this.width + ",0)").attr("transform", "translate(" + this.scalex(0) + ",0)") // axe x au zero
     .call(d3.axisLeft(this.scaley).ticks(nticky).tickFormat(d3.format("")))
-
-
 
   }
 
@@ -112,27 +117,27 @@ this.svg.append("clipPath")
 // drag_update pour mettre à jour les données (et appeler l'update)
 // symbol
 // rotate si on tourne pour les données négatives (pour les diracs)
-  stem(id, tag, data, drag_update = null, symbol = d3.symbol().size(1).type(d3.symbolCircle), rotate = false) {
-    var g = this.axis.append("g").attr("class", id).attr("clip-path", "url(#" + this.id + "clip)")
+stem(id, tag, data, drag_update = null, symbol = d3.symbol().size(1).type(d3.symbolCircle), rotate = false) {
+  var g = this.svg.append("g").attr("class", id).attr("clip-path", "url(#" + this.id + "clip)")
 
-    if (tag != "")
-    {
+  if (tag != "")
+  {
     this.legend.append('path').attr("d", symbol)
-      .attr('transform', "translate(20, " + (20 + this.legend_shift) +")  scale(" + 10 + ")")
-      .attr("fill", "currentcolor")
-      .attr("class", id)
+    .attr('transform', "translate(20, " + (20 + this.legend_shift) +")  scale(" + 10 + ")")
+    .attr("fill", "currentcolor")
+    .attr("class", id)
 
     var fo = this.legend.append("foreignObject").attr('x', '40').attr('y', (10 + this.legend_shift)).attr('width', '200').attr("height", "100")
     fo.append('xhtml:p').attr("style", "margin:0 ; vertical-align:middle").text(tag)
 
-  this.legend_shift = this.legend_shift + 30
-}
-    return new Stem(g, data, this.scalex, this.scaley, this.yrange, drag_update, symbol, rotate)
+    this.legend_shift = this.legend_shift + 30
   }
+  return new Stem(g, data, this.scalex, this.scaley, this.yrange, drag_update, symbol, rotate)
+}
 
   // voronoi on trace les cellules
   scatter(id, tag, data, drag_update=null, symbol = d3.symbol().size(1).type(d3.symbolCircle), voronoi=false) {
-    var g = this.axis.append("g").attr("class", id).attr("clip-path", "url(#" + this.id + "clip)")
+    var g = this.svg.append("g").attr("class", id).attr("clip-path", "url(#" + this.id + "clip)")
 
     if (tag != "")
     {
@@ -147,14 +152,9 @@ this.svg.append("clipPath")
 }
     return new Scatter(g, data, this.scalex, this.scaley, this.xrange, this.yrange, drag_update, symbol, voronoi)
 
-
-
-
-
-
   }
   line(id, tag, data) {
-    var g = this.axis.append("g").attr("class", id).attr("clip-path", "url(#" + this.id + "clip)")
+    var g = this.svg.append("g").attr("class", id).attr("clip-path", "url(#" + this.id + "clip)")
 
     if (tag != "")
     {
@@ -177,20 +177,20 @@ this.svg.append("clipPath")
     return new Line(g, data, this.scalex, this.scaley)
   }
   area(id, tag, data) {
-    var g = this.axis.append("g").attr("class", id).attr("clip-path", "url(" + this.id + "clip)")
+    var g = this.svg.append("g").attr("class", id).attr("clip-path", "url(" + this.id + "clip)")
     return new Area(g, data, this.scalex, this.scaley)
 
 
   }
 
   lines(id, tag, data) {
-    var g = this.axis.append("g").attr("class", id)
+    var g = this.svg.append("g").attr("class", id)
     return new Lines(g, data, this.scalex, this.scaley)
   }
 
   rectangle(id, tag, data)
   {
-    var g = this.axis.append("g").attr("class", id)
+    var g = this.svg.append("g").attr("class", id)
     return new Rect(g, data, this.scalex, this.scaley)
   }
 }
@@ -224,8 +224,6 @@ class Stem{
     this.symbol = symbol//d3.symbol().size(2).type(symbol)
 
     // création des marqueurs
-
-
     this.g1.selectAll("path").data(Z).enter()
     .append("path")
       .attr("d", this.symbol)
@@ -261,12 +259,14 @@ class Stem{
 
     const sell = this.g2.selectAll("line").data(Z)
     sell.exit().remove()
-    sell.enter().append("line").attr("stroke", "currentcolor")
+    sell.enter().append("line").attr("stroke", "currentcolor").attr("x1", (d) => this.scalex(d[0]))
+    .attr("x2", (d) => this.scalex(d[0]))
+    .attr("y1", this.scaley(0))
+    .attr("y2", (d) => this.scaley(d[1]))
     sell.attr("x1", (d) => this.scalex(d[0]))
     .attr("x2", (d) => this.scalex(d[0]))
     .attr("y1", this.scaley(0))
     .attr("y2", (d) => this.scaley(d[1]))
-
   }
 
   line_attr(name, value) {this.g2.attr(name, value)}
@@ -318,37 +318,30 @@ class Scatter{
      {
        // on modifie les données sur les deux axes et on appelle drag_update
        this.g1.selectAll("path").call(d3.drag()
-        .on("drag", (d, i) => (
-            this.data.x[i]=limit_interval(this.scalex.invert(d3.event.x), this.xrange),
-            this.data.y[i]=limit_interval(this.scaley.invert(d3.event.y), this.yrange),
-            this.drag_update())))
+        .on("drag", (d, i) => (this.drag_update(i, this.scalex.invert(d3.event.x), this.scaley.invert(d3.event.y)))))
      }
-
   }
 
   // update du graphe
   update() {
 
     const Z = d3.zip(this.data.x, this.data.y, this.data.r)
-    const sel = this.g1.selectAll("path").data(Z)
-    sel.exit().remove()
-    sel.enter().append("path").attr("d", this.symbol).attr("fill", "currentcolor").attr('transform', (d, i) => ("translate(" + this.scalex(d[0]) + ", " + this.scaley(d[1]) + ") scale(" + d[2] + ")"))
-    sel.attr('transform', (d, i) => ("translate(" + this.scalex(d[0]) + ", " + this.scaley(d[1]) + ") scale(" + d[2] + ")"))
+
+    var selp = this.g1.selectAll("path").data(Z)
+
+    selp.exit().remove()
+    selp.enter().append("path").attr("d", this.symbol).attr("fill", "currentcolor").attr('transform', (d, i) => ("translate(" + this.scalex(d[0]) + ", " + this.scaley(d[1]) + ") scale(" + d[2] + ")"  +((this.rotate && d[1] < 0) ? " rotate(180)":"")))
+    selp.attr('transform', (d, i) => ("translate(" + this.scalex(d[0]) + ", " + this.scaley(d[1]) + ") scale(" + d[2] + ")"  +((this.rotate && d[1] < 0) ? " rotate(180)":"")))
 
     if (this.voronoi)
     {     this.voronoi = d3.Delaunay.from(Z, d => this.scalex(d[0]),  d => this.scaley(d[1]))
       .voronoi([this.scalex(this.xrange[0]),this.scaley(this.yrange[1]),this.scalex(this.xrange[1]),this.scaley(this.yrange[0])])
       this.g2.selectAll("path").attr("stroke", "blue").attr("stroke-width", 2).attr("d", this.voronoi.render())
     }
-
   }
   marker_attr(name, value) {this.g1.attr(name, value)}
   attr(name, value) {this.g.attr(name, value)}
 }
-
-
-
-
 
 class Line{
   constructor(g, data, scalex, scaley){
@@ -365,7 +358,6 @@ class Line{
 
      const XY = d3.zip(this.data.x, this.data.y)
      this.g1.append("path").datum(XY).attr("d", d3.line().x(d => this.scalex(d[0])).y(d => this.scaley(d[1]))).attr("fill", "none").attr("stroke", "currentcolor")
-
   }
 
   // update du graphe
@@ -391,7 +383,6 @@ class Rect{
 
      const XY = d3.zip(this.data.x, this.data.y, this.data.width, this.data.height)
      this.g1.selectAll("rect").data(XY).enter().append("rect").attr("x", (d) => this.scalex(d[0])).attr("y", (d) => this.scaley(d[1])).attr("width", (d) => + this.scalex(d[0] + d[2]) - this.scalex(d[0])).attr("height", (d) => - this.scaley(d[1] + d[3]) + this.scaley(d[1])).attr("fill", "currentcolor").attr("stroke", "none")
-
   }
 
   // update du graphe
@@ -418,7 +409,6 @@ class Lines{
      const XY = d3.zip(this.data.x1, this.data.y1, this.data.x2, this.data.y2)
 
      this.g1.selectAll("line").data(XY).enter().append("line").attr("x1", (d) => this.scalex(d[0])).attr("y1", (d) => this.scaley(d[1])).attr("x2", (d) => this.scalex(d[2])).attr("y2", (d) => this.scaley(d[3])).attr("fill", "none").attr("stroke", "currentcolor")
-
   }
 
   // update du graphe
@@ -427,7 +417,6 @@ class Lines{
     this.g1.selectAll("line").data(XY).attr("x1", (d) => this.scalex(d[0])).attr("y1", (d) => this.scaley(d[1])).attr("x2", (d) => this.scalex(d[2])).attr("y2", (d) => this.scaley(d[3]))
   }
 }
-
 
 class Area{
   constructor(g, data, scalex, scaley){
@@ -447,14 +436,11 @@ class Area{
      .attr("d", d3.area().curve(d3.curveStep).x((d, i) => this.scalex(this.data.x[i])).y0(this.scaley(0)).y1(d => (d > 0 ? this.scaley(d) : this.scaley(0))))
      this.gm.append("path").datum(this.data.y).attr("fill", "red")
      .attr("d", d3.area().curve(d3.curveStep).x((d, i) => this.scalex(this.data.x[i])).y0(this.scaley(0)).y1(d => (d < 0 ? this.scaley(d) : this.scaley(0))))
-
   }
 
   // update du graphe
   update() {
-
     this.gp.selectAll("path").datum(this.data.y).attr("d", d3.area().curve(d3.curveStep).x((d, i) => this.scalex(this.data.x[i])).y0(this.scaley(0)).y1(d => (d > 0 ? this.scaley(d) : this.scaley(0))))
     this.gm.selectAll("path").datum(this.data.y).attr("d", d3.area().curve(d3.curveStep).x((d, i) => this.scalex(this.data.x[i])).y0(this.scaley(0)).y1(d => (d < 0 ? this.scaley(d) : this.scaley(0))))
-
 }
 }

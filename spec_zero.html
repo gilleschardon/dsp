@@ -1,0 +1,87 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <meta charset="utf-8">
+
+  <title>Analyse spectrale par FFT</title>
+
+
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+
+
+  .ir  {
+    color: #f66;
+  }
+  .in   {color: blue;}
+  .out   {color: red;}
+  .gain {color: blue}
+  .phase {color: red}
+  .dft {color: red}
+
+  .line {stroke-width: 2px}
+  .in .line, .out .line {opacity: 0.2}
+
+  .axis {
+    opacity: 1;
+    stroke-width: 1;
+  }
+  .axis line {
+    opacity: 1;
+    stroke-width: 1;
+  }
+  .xgrid, .ygrid  {
+    opacity: 1;
+    stroke-width: 2px;
+    stroke: #eee;
+  }
+
+  .domain, .tick line {
+    stroke: #aaa;
+  }
+
+  .frame {
+    opacity: 1;
+    stroke-width: 2px;
+    stroke: #999;
+  }
+
+  #plotgain, #plotphase
+  {
+    display: inline-block;
+  }
+
+  </style>
+</head>
+
+<body>
+  <h1>Analyse spectrale par FFT</h1>
+
+
+
+  <p>Zero-padding:   <input value="20" type="range" id="zeropad" min="20" max="500"/></p>
+  <p>Length:   <input value="20" type="range" id="length" min="20" max="100"/></p>
+
+  <p>FFt shift:  <input type="checkbox" id="fftshift"/></p>
+  <p><select name="window" id="win">
+    <option value="rect">rectangle</option>
+    <option value="sine">sine</option>
+
+    <option value="Hann">Hann</option>
+    <option value="Hamming">Hamming</option>
+
+  </select>
+</p>
+  <div id="plotir"></div>
+  <div id="plotgain"></div>
+
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="simpled3.js"></script>
+  <script src="spec_zero.js"></script>
+<script> window.MathJax.typeset()</script>
+</body>
+</html>

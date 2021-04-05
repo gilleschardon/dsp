@@ -1,5 +1,6 @@
 
-
+var filterbuffer
+var filternode
 
 const names = {
   dirac: "Dirac",
@@ -193,6 +194,12 @@ lg.update()
 lp.update()
 
   update()
+
+  buf = filterbuffer.getChannelData(0)
+  console.log(buf)
+  buf.set(irplot)
+  filterNode.buffer = filterbuffer;
+
 }
 
 function update()
@@ -277,7 +284,39 @@ if (idin == "Dirac")
 
 }
 irchoice.add(opt, null)
-
 }
+
+
+var AudioCtx = window.AudioContext || window.webkitAudioContext;
+
+var audioCtx = new AudioCtx({sampleRate : 8000})
+
+var myAudio = document.querySelector('audio');
+
+var source = audioCtx.createMediaElementSource(myAudio);
+var filterNode = audioCtx.createConvolver();
+filterbuffer = audioCtx.createBuffer(1, L, 8000);
+filterNode.normalize= false;
+
+array = filterbuffer.getChannelData(0);
+array[0] =  1
+
+
+filterNode.buffer = filterbuffer;
+
+
+source.connect(filterNode);
+//
+// filter = audioCtx.createBiquadFilter()
+// BiquadFilterNode.frequency = 400
+// BiquadFilterNode.Q = 0.5
+// BiquadFilterNode.type = "low-pass"
+// BiquadFilterNode.gain = 1
+// source.connect(filter);
+
+filterNode.connect(audioCtx.destination);
+
+
+
 
 update()

@@ -31,7 +31,7 @@ dataNR = {x: [-freq], y:[0.5], r: r}
 dataNI = {x: [-freq], y:[0], r: r}
 
 sigrange = [-T,T];
-FSrange = [-5, 5]
+FSrange = [-2, 2]
 yrangesig = [-1.5, 1.5]
 yrangedft = [-1.1, 1.1]
 

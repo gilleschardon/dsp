@@ -6,7 +6,7 @@
 
   <meta charset="utf-8">
 
-  <title>Fourier transform</title>
+  <title>Transformée de Fourier</title>
 
 
   <link rel="stylesheet" href="styles.css">
@@ -51,16 +51,19 @@
 </head>
 
 <body>
-<h1><h1>Fourier transform</h1>
-<p> We plot the Fourier transform of a Gabor atom, a cosine windowed by a gaussian function.<p>
-  <p> Watch the effect of
-    <ul>
-      <li> a delay (phase of the FT)</li>
-      <li> the width of the window (width of the FT)</li>
-      <li> a modulation (FT shifted towards high frequencies).</li>
-    </ul></p>
+<h1>Transformée de Fourier</h1>
+<p>
+  On trace ici la transformée de Fourier de la fonction porte
+  \[ x(t) = \mathbf{1}_{[-T/2, T/2]} \]
+  donnée par le sinus cardinal
+  \[X(f) =  \frac{\sin \pi fT}{\pi f}\]
+</p>
 
-
+<p> Observez les effets
+  <ul>
+    <li> d'un retard (terme de phase appliqué à la TF)</li>
+    <li> de l'élargissement de la porte (compression de la TF).</li>
+  </ul></p>
   <div id="params">
   </div>
   <!-- <p>Width<input class="slider" type="range" min="0" max="100" value="50" id="width"></input></p>
@@ -71,7 +74,7 @@
 
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="simpled3.js"></script>
-  <script src="fourier_gabor.js"></script>
+  <script src="fourier.js"></script>
 <script> window.MathJax.typeset()</script>
 </body>
 </html>

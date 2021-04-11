@@ -6,7 +6,7 @@
 
   <meta charset="utf-8">
 
-  <title>Spectral analysis with the FFT</title>
+  <title>Analyse spectrale par FFT</title>
 
 
   <link rel="stylesheet" href="styles.css">
@@ -53,19 +53,19 @@
 </head>
 
 <body>
-  <h1>Spectral analysis with the FFT</h1>
+  <h1>Analyse spectrale par FFT</h1>
 
 
 
-  <p>We analyse a signal using the FFT, to estimate the frequencies and amplitudes of its sinusoidal components.</p>
+  <p>On analyse un signal par FFT, pour estimer les fréquences et amplitudes de ses composantes sinusoïdales.</p>
 
-  <p>Check the  effects of:
+  <p>Observez les effets :
     <ul>
-      <li> zero-padding, yielding a finer sampling of the DTFT of the signal,</li>
-      <li> the length of the window, allowing a better spectral resolution,</li>
-      <li> the window on the level of the sidelobes.</li>
+      <li> du zero-padding, permettant d'obtenir un échantillonnage fin de la TFTD du signal,</li>
+      <li> de la longueur d'observation du signal, permettant une meilleure résolution spectrale,</li>
+      <li> de la fenêtre, réduisant le niveau des lobes secondaires.</li>
      </ul>
-    With the appropriate parameters, three sinusoids are detected.</p>
+    Avec les bons paramètres, trois sinusoïdes sont détectées.</p>
 
   <p>Zero-padding:   <input value="20" type="range" id="zeropad" min="20" max="500"/></p>
   <p>Length:   <input value="20" type="range" id="length" min="20" max="100"/></p>

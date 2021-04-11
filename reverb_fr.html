@@ -6,7 +6,7 @@
 
   <meta charset="utf-8">
 
-  <title>Reverberation</title>
+  <title>Réverbération</title>
 
 
   <link rel="stylesheet" href="styles.css">
@@ -50,19 +50,19 @@
 </head>
 
 <body>
-  <h1>Reverberation</h1>
+  <h1>Réverbération</h1>
 
-  <p>Reverberation in a room can be modeled as the convolution of a sound and the impulse response of the room.
-    Several effects are shown here:
+  <p>La réverbération dans une salle peut se modéliser par la convolution d'un signal sonore avec la réponse impulsionnelle de la salle.
+    Différents effets sont proposés ici :
     <ul>
-      <li>No effect : the impulse repsonse is an impulse at time \(t=0\) with amplitude 1.</li>
-      <li>Delay : an impulse is added, modeling a delay.</li>
-      <li>Delays : several pulses, with uniform delay and exponentially decreasing amplitudes.</li>
-      <li>Artificial reverberation: reflections with various delays and amplitudes simulate the reverberation of a room.</li>
+      <li>Aucun effet : la réponse impulsionnelle est une impulsion à \(t=0\) d'amplitude 1.</li>
+      <li>Echo unique : une impulsion est rajoutée à la réponse, modélisant un écho retardé et attenué.</li>
+      <li>Echos multiples : plusieurs impulsions, d'amplitude décroissante exponentiellement, modélisent plusieurs échos espacés uniformément.</li>
+      <li>Réverbération artificielle : des réflexions de retards et d'amplitudes variés simulent la réverbération dans une salle.</li>
     </ul>
-    Drag the impulses to test different settings.</p>
+    Les impulsions peuvent être déplacées pour tester différentes configurations.</p>
 
-  <p>Effect : <select id="filter"></select></p>
+  <p>Effet : <select id="filter"></select></p>
   <p><audio controls src="ratp_8_pad.wav"></audio></p>
 
 

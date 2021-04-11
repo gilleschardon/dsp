@@ -6,7 +6,7 @@
 
   <meta charset="utf-8">
 
-  <title>Discrete filters</title>
+  <title>Filtres discret</title>
 
 
   <link rel="stylesheet" href="styles.css">
@@ -58,24 +58,24 @@
 </head>
 
 <body>
-  <h1>Discrete filters</h1>
+  <h1>Filtres discret</h1>
 
   <p>
-    Complex exponentials are eigensignals of filters (time-invariant and linear systems) .
-
-    In the discrete case, the response to the input \(e_\nu [n] = \exp(i 2\pi \nu n)\) is
-    \(H(\nu) e_\nu[n]\), a complex exponential with identical frequency, multiplied by the frequency response
-    of the filter \(H(\nu)\), given by the discrete time Fourier transform of the impulse response of the filter:
+    Les filtres (systèmes linéaires invariants) admettent comme signaux propres les exponentielles complexes.
+    Dans le cas discret, la réponse à une entrée \(e_\nu [n] = \exp(i 2\pi \nu n)\) est
+    \(H(\nu) e_\nu[n]\), une exponentielle complexe
+    de la même fréquence, multipliée par la réponse fréquentielle du filtre \(H(\nu)\), obtenue par
+    transformée de Fourier discrète de la réponse impulsionnelle du filtre :
     \[H(\nu) = \sum_{n\in\mathbf Z} h[n] \exp(-i 2\pi \nu n) .\]</p>
 
-    <p>We plot here the real part of the complex exponentials, for which the filter acts as a gain and a delay.</p>
+    <p>On trace ici la partie réelle des exponentielles complexes, pour laquelle l'action du filtre se traduit par un gain et un déphasage. (Les graphes continus de l'entrée et de la sortie ne sont qu'une aide visuelle.)</p>
 
-    <p>Drag the coefficients of the filters to watch the effect on the output and the frequency response.</p>
+    <p>Manipulez les coefficients du filtre pour observer l'effet sur la sortie et la réponse fréquentielle</p>
 
-  <p>Filtered sound <audio controls src="ratp_8.wav"></audio></p>
+  <p>Son filtré <audio controls src="ratp_8.wav"></audio></p>
 
-  <p>Predefined filters : <select id="filter"></select></p>
-  <p>Input frequency :  <input value="10" type="range" id="freq" min="0" max="100"/></p>
+  <p>Filtres prédéfinis : <select id="filter"></select></p>
+  <p>Fréquence du signal d'entrée :  <input value="10" type="range" id="freq" min="0" max="100"/></p>
   <div id="plotir"></div>
   <div id="plotsig"></div>
   <div id="plotgain"></div><div id="plotphase"></div>

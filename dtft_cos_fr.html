@@ -6,7 +6,7 @@
 
   <meta charset="utf-8">
 
-  <title>Fourier transform</title>
+  <title>TFTD d'un cosinus</title>
 
 
   <link rel="stylesheet" href="styles.css">
@@ -15,11 +15,12 @@
 
 
   .sigreal   {color: blue;}
-  .sigimag   {color: red;}
-  .fourierreal {color: blue}
-  .fourierimag {color: red}
+  .PR, .NR {color: blue}
 
   .line {stroke-width: 2px }
+  .sigD {color: red}
+
+  .area { opacity: 0.2}
 
   .axis {
     opacity: 1;
@@ -45,33 +46,37 @@
     stroke: #999;
   }
 
+  .rect {color: green; opacity: 0.2}
 
 
   </style>
 </head>
 
 <body>
-<h1><h1>Fourier transform</h1>
-<p> We plot the Fourier transform of a Gabor atom, a cosine windowed by a gaussian function.<p>
-  <p> Watch the effect of
-    <ul>
-      <li> a delay (phase of the FT)</li>
-      <li> the width of the window (width of the FT)</li>
-      <li> a modulation (FT shifted towards high frequencies).</li>
-    </ul></p>
+<h1>TFTD d'un cosinus</h1>
+<p>
+  On trace ici la transformée de Fourier à temps discret d'un signal sinusoïdal
+  \[
+  x[n] = \cos(2\pi \nu n),
+  \]
+  donnée par
+  \[
+    X(\nu) = \frac{1}{2} \sum_{n\in\mathbf Z} \delta_{\nu - n} + \delta_{-\nu + n}.
+\]
+</p>
 
+<p> En comparant avec le signal sinusoïdal continu   \(
+  x_c(t) = \cos(2\pi \nu t),
+  \), on observe le phénomène de repliement spectral.
+  <p><input value="0" type="range" id="freq" min="000" max="200"/><p>
 
-  <div id="params">
-  </div>
-  <!-- <p>Width<input class="slider" type="range" min="0" max="100" value="50" id="width"></input></p>
-  <p>Center<input class="slider" type="range" min="0" max="100" value="50" id="center"></input></p> -->
 
   <div id="plotsig"></div>
-  <div id="plotfourier"></div>
+  <div id="plotdft"></div>
 
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="simpled3.js"></script>
-  <script src="fourier_gabor.js"></script>
+  <script src="dtft_cos.js"></script>
 <script> window.MathJax.typeset()</script>
 </body>
 </html>

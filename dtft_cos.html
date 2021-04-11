@@ -6,7 +6,7 @@
 
   <meta charset="utf-8">
 
-  <title>TFTD d'un cosinus</title>
+  <title>DTFT of a cosine</title>
 
 
   <link rel="stylesheet" href="styles.css">
@@ -53,21 +53,21 @@
 </head>
 
 <body>
-<h1>TFTD d'un cosinus</h1>
+<h1>DTFT of a cosine</h1>
 <p>
-  On trace ici la transformée de Fourier à temps discret d'un signal sinusoïdal
+  We plot the Discrete Time Fourier Transform of a sinusoidal signal
   \[
   x[n] = \cos(2\pi \nu n),
   \]
-  donnée par
+  given by
   \[
     X(\nu) = \frac{1}{2} \sum_{n\in\mathbf Z} \delta_{\nu - n} + \delta_{-\nu + n}.
 \]
 </p>
 
-<p> En comparant avec le signal sinusoïdal continu   \(
+<p> By comparing with the continuous time sinusoidal signal  \(
   x_c(t) = \cos(2\pi \nu t),
-  \), on observe le phénomène de repliement spectral.
+  \), we observe spatial aliasing.
   <p><input value="0" type="range" id="freq" min="000" max="200"/><p>
 
 

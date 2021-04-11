@@ -6,7 +6,7 @@
 
   <meta charset="utf-8">
 
-  <title>Circular convolution</title>
+  <title>Convolution circulaire</title>
 
 
   <link rel="stylesheet" href="styles.css">
@@ -53,15 +53,15 @@
 </head>
 
 <body>
-  <h1>Circular convolution</h1>
+  <h1>Convolution circulaire</h1>
 
   <p>
-  The circular convolution  \( \mathbf{z} = \mathbf{x} \circledast \mathbf{y} \) between two vectors \(\mathbf{x}\) and  \(\mathbf{y}\)
-  in \(\mathbf{C}^N\) is defined by:
+  La convolution circulaire \( \mathbf{z} = \mathbf{x} \circledast \mathbf{y} \) entre deux vecteurs \(\mathbf{x}\) et  \(\mathbf{y}\)
+  de \(\mathbf{C}^N\) est définie par :
   \[z_n = \sum_{k=0}^{N-1} x_{(k - n\ \mathrm{mod. } N)} y_k\]
-  for \( 0 \leq n < N\).</p>
+  pour \( 0 \leq n < N\).</p>
 
-  <p>It can be interpreted as the product of a circular matrix and a vector. With \(N = 4\) :
+  <p>On reconnaît l'écriture d'un produit d'une matrice circulante et d'un vecteur. Par exemple pour \(N = 4\) :
     \[
 
   	\left(
@@ -90,7 +90,7 @@
   \end{array}
     \right)
     \]
-    or equivalently, using the commutativity of the convolution:
+    ou de façon équivalente, par commutatitivé de la convolution,
       \[
 
   	\left(
@@ -122,7 +122,7 @@
 
   </p>
 
-  <p>Consequence : coefficients in the tails of the input signals will influence the head of the result.</p>
+  <p>Conséquence : les coefficients en queue des signaux d'entrée influent sur les coefficients en tête de la sortie.</p>
   <input value="Reset" type="submit" id="reset"/>
   <div id="plotx"></div>
   <div id="ploty"></div>

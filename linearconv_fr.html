@@ -6,7 +6,7 @@
 
   <meta charset="utf-8">
 
-  <title>Linear convolution</title>
+  <title>Convolution linéaire</title>
 
 
   <link rel="stylesheet" href="styles.css">
@@ -53,20 +53,20 @@
 </head>
 
 <body>
-  <h1>Linear convolution</h1>
+  <h1>Convolution linéaire</h1>
 
-  <p>We compute the linear convolution of two causal signals with finite support.<p>
+  <p>On calcule ici la convolution de deux signaux causaux de supports finis. Les coefficients nuls ne sont pas représentés.<p>
 
-    <p>Convolution is defined by
+    <p>La convolution est définie par l'équation suivante :
       \[(x \star y)[n]  = \sum_{k\in\mathbf Z} x[k] y[n-k]\]
     </p>
 
 
-<p>By dragging the coefficients of  \(x\) and \(y\), check that
+<p>En modifiant les coefficients de \(x\) et \(y\), vérifiez que
   <ul>
-    <li>the response of a filter with impulse response \(y\) to an impulse \(x = \delta\) is \(z = y\),</li>
-    <li>the response of a filter with impulse response \(y\) an impulse at index \(k\) is the input \(x\) shifted by \(k\) samples,</li>
-    <li>the convolution of two signals can be obtained by decomposing a signal as a sum of impulses, and adding the responses to these impulses.</li>
+    <li>la réponse d'un filtre de réponse impulsionnelle \(y\) à une impulsion \(x = \delta\) est \(z = y\),</li>
+    <li>la réponse d'un filtre dont la réponse impulsionnelle \(y\) est une impulsion à l'indice \(k\) est le signal \(x\) décalé de \(k\) échantillons,</li>
+    <li>la convolution de deux signaux s'obtient en décomposant un des signaux en somme d'impulsions, et en additionant les réponses à ces impulsions (et réciproquement)</li>
   </ul>
 
   <input value="Reset" type="submit" id="reset"/>

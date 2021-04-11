@@ -6,7 +6,7 @@
 
   <meta charset="utf-8">
 
-  <title>FIR frequency response using the FFT</title>
+  <title>Calcul de réponse fréquentielle de filtre FIR par FFT</title>
 
 
   <link rel="stylesheet" href="styles.css">
@@ -52,23 +52,21 @@
 </head>
 
 <body>
-  <h1>FIR frequency response using the FFT</h1>
+  <h1>Calcul de réponse fréquentielle de filtre FIR par FFT</h1>
 
   <p>
-    The frequency response of a finite impulse response filter can be efficiently computed as a Fast Fourier Transform.
+    La réponse fréquentielle d'un filtre à réponse impulsionnelle finie peut être calculée efficacement comme une transformée de Fourier rapide (FFT).
 
-    Without loss of generality, we consider a causal FIR filter, with impulse response \(h[n] \) non-zero in \([0, N-1]\). With \(\mathbf h^N = (h[0], \ldots, h[N-1])\) the vector holding the non-zero coefficients of the impulse response, the DFT \(\mathbf H^N\) of  \(\mathbf h^N\) yields samples of the
-    frequency response of the filter:
+    Sans perte de généralité, on considère le cas d'un filtre RIF causal, de réponse impulsionnelle \(h[n] \) de support \([0, N-1]\). Avec le vecteur \(\mathbf h^N = (h[0], \ldots, h[N-1])\) contenant les coefficients non nuls de la réponse impulsionnelle, la transformée de Fourier discrète \(\mathbf H^N\) de  \(\mathbf h^N\) contient
+    des échantillons de la réponse fréquentielle du filtre :
     \[\mathbf H^N_k = H\left(\frac{k}{N}\right) \mbox{ pour } 0 \leq k < N.\]
   							       </p>
   <p>
-    The sampling of the frequency response is too coarse for a faithful plot of the frequency response. Zero-padding can be used. It consists of computing the DFT of
-\(\mathbf h^L = (h[0], \ldots, h[N-1], 0, \ldots, 0) \) of length \(L > N\). We get a finer sampling of the frequency response:
-
+    L'échantillonnage de la réponse fréquentielle étant trop grossier pour un bon tracé de la réponse fréquentielle, on utilise la technique de zero-padding, qui consiste à calculer la DFT du vecteur \(\mathbf h^L = (h[0], \ldots, h[N-1], 0, \ldots, 0) \) de taille \(L > N\). On a alors un échantillonage plus fin :
       \[\mathbf H^L_k = H\left(\frac{k}{L}\right) \mbox{ pour } 0 \leq k < L.\]
   </p>
 
-  <p>We can then center the plot around the origin to highlight the symmetry of the frequency response of a filter with real coefficients: \(H(-\nu) = H(\nu)^\star\).</p>
+  <p>Le graphe peut ensuite être recentré autour de l'origine pour mettre en valeur la symétrie de la TFTD d'un signal réel : \(H(-\nu) = H(\nu)^\star\).</p>
 
 
   <p>Zero-padding:   <input value="5" type="range" id="zeropad" min="5" max="50"/></p>

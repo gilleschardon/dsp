@@ -6,7 +6,7 @@
 
   <meta charset="utf-8">
 
-  <title>Continous time convolution</title>
+  <title>Autocorrélation</title>
 
 
   <link rel="stylesheet" href="styles.css">
@@ -22,8 +22,8 @@
   {
     display: inline-block
   }
-  .in1   {color: blue;}
-  .in2   {color: red;}
+  .in1   {color: green;}
+  .in2   {color: violet;}
   .out {color: green}
   .prod {color: black}
   .current {color: red}
@@ -59,30 +59,34 @@
 
 <body>
 
-  <h1>Continous time convolution</h1>
+  <h1>Autocorrélation</h1>
 
   <p>
-  The convolution \( z = x \star y \) between two signals \(x\) and \(y\)  is defined by :
-  \[z(t) = \int_{\mathbf R}  x(t -\tau ) y(\tau) d\tau\]
-  for \( t \in \mathbf{R} \).</p>
+  L'autocorrélation d'un signal \(x\)  est définie par :
+  \[r(t) = \int_{\mathbf R}  x(\tau - t) y(\tau) d\tau\]
+  pour \( t \in \mathbf{R} \).</p>
 
   <table>
-    <tr><td>\(x\)</td><td><select id="in1"></select></td></tr>
-    <tr><td>\(y\)</td><td><select id="in2"></select></td></tr>
-    <tr><td>\(u_0\)</td><td>  <input value="0" type="range" id="delay" min="-500" max="500"/></td></tr>
+    <tr><td>Cello</td><td><audio src="cello.mp3" controls /></td></tr>
+    <tr><td>Saxophone</td><td><audio src="saxophone.mp3" controls /></td></tr>
+    <tr><td>Clarinet</td><td><audio src="clarinet.mp3" controls /></td></tr>
+
+    <tr><td>Signal : </td><td><select id="in1"></select></td></tr>
+
+    <tr><td>\(u_0\)</td><td>  <input value="0" type="range" id="delay" min="-600" max="600"/></td></tr>
   </table>
 
   <div>
   <div id="plotin1"></div>
-  <div id="plotin2"></div>
+  <div id="plotprod"></div>
+
 </div>
 <div>
-  <div id="plotprod"></div>
   <div id="plotout"></div>
 </div>
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="simpled3.js"></script>
-  <script src="convcont.js"></script>
+  <script src="correlf0.js"></script>
 <script> window.MathJax.typeset()</script>
 </body>
 </html>

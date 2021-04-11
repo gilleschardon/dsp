@@ -6,7 +6,7 @@
 
   <meta charset="utf-8">
 
-  <title>Transformée de Fourier discrète</title>
+  <title>Calcul de réponse fréquentielle de filtre FIR par FFT</title>
 
 
   <link rel="stylesheet" href="styles.css">
@@ -14,10 +14,17 @@
   <style>
 
 
-  .sigreal {color: blue;}
-  .sigimag {color: red;}
-  .dftreal {color: blue}
-  .dftimag {color: red}
+  .  {
+    color: #f66;
+  }
+  .proba   {color: blue;}
+  .fun   {color: red;}
+  .bern {color: blue}
+  .phase {color: red}
+  .dft {color: red}
+
+  .line {stroke-width: 2px}
+  .in .line, .out .line {opacity: 0.2}
 
   .axis {
     opacity: 1;
@@ -43,26 +50,24 @@
     stroke: #999;
   }
 
+  #plotgain, #plotphase
+  {
+    display: inline-block;
+  }
 
   </style>
 </head>
 
 <body>
-<h1> Transformée de Fourier discrète </h1>
-  <p>La transformée de Fourier discrète \(\mathbf X\) d'un vecteur \(\mathbf x\) de dimension \(N\) est donnée par ses coefficients :
-    \[
-    X_k = \sum_{n=0}^{N-1} \exp\left(- i 2 \pi n \frac{k}{N}\right) x_n
-    \]
-  </p>
+  <p>n :   <input value="1" type="range" id="n" min="1" max="150" step="1"/></p>
+  <p>x :   <input value="10" type="range" id="x" min="0" max="100"/></p>
 
-  <input value="Reset" type="submit" id="reset"/>
-
-  <div id="plotsig"></div>
-  <div id="plotdft"></div>
+  <div id="plotproba"></div>
+  <div id="plotfun"></div>
 
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="simpled3.js"></script>
-  <script src="dft.js"></script>
+  <script src="binom.js"></script>
 <script> window.MathJax.typeset()</script>
 </body>
 </html>

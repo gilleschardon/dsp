@@ -17,10 +17,8 @@
   .ir  {
     color: #f66;
   }
-  .in   {color: blue;}
-  .out   {color: red;}
+
   .gain {color: blue}
-  .phase {color: red}
   .dft {color: red}
 
   .line {stroke-width: 2px}
@@ -50,10 +48,6 @@
     stroke: #999;
   }
 
-  #plotgain, #plotphase
-  {
-    display: inline-block;
-  }
 
   </style>
 </head>
@@ -62,6 +56,16 @@
   <h1>Analyse spectrale par FFT</h1>
 
 
+
+  <p>On analyse un signal par FFT, pour estimer les fréquences et amplitudes de ses composantes sinusoïdales.</p>
+
+  <p>Observez les effets :
+    <ul>
+      <li> du zero-padding, permettant d'obtenir un échantillonnage fin de la TFTD du signal,</li>
+      <li> de la longueur d'observation du signal, permettant une meilleure résolution spectrale,</li>
+      <li> de la fenêtre, réduisant le niveau des lobes secondaires.</li>
+     </ul>
+    Avec les bons paramètres, trois sinusoïdes sont détectées.</p>
 
   <p>Zero-padding:   <input value="20" type="range" id="zeropad" min="20" max="500"/></p>
   <p>Length:   <input value="20" type="range" id="length" min="20" max="100"/></p>

@@ -2,6 +2,10 @@
 var filterbuffer
 var filternode
 
+Lh = 20
+Nh = 2*Lh+1
+
+
 const names = {
   dirac: "Dirac",
   delay: "Delay",
@@ -13,14 +17,12 @@ const names = {
   hannsinc: "Sinc*Hann",
   hanncos: "Sinc*Hann*Cos"
 }
-Lh = 20
-Nh = 2*Lh+1
-var hann = [...Array(Nh).keys()].map(t => (1 - Math.cos(t / Lh * Math.PI))/40)
 
+
+var hann = [...Array(Nh).keys()].map(t => (1 - Math.cos(t / Lh * Math.PI))/40)
 var hannsinc = [...Array(Nh).keys()].map(t => t == Lh ? 4*Math.PI*0.2/10 : (1 - Math.cos(t / Lh * Math.PI))/10 * Math.sin((t-Lh)*2*Math.PI*0.2)/ (t - Lh))
 var S  = hannsinc.reduce((u, v) => (u+v))
 hannsinc = hannsinc.map(t => t/S)
-
 var hanncos = [...Array(Nh).keys()].map(t => 2*(t == Lh ? 4*Math.PI*0.1/10 : (1 - Math.cos(t / Lh * Math.PI))/10 * Math.sin((t-Lh)*2*Math.PI*0.1)/ (t - Lh)))
 var S  = hanncos.reduce((u, v) => (u+v))
 hanncos = hanncos.map(t => t/S*2)
@@ -78,8 +80,6 @@ var r = Array(t.length).fill(5)
 
 Nfreq = 1000
 
-
-
 var nu = [...Array(Nfreq).keys()].map(t => (t/Nfreq - 0.5))
 var Hr = Array(Nfreq).fill(0)
 var Hi = Array(Nfreq).fill(0)
@@ -124,7 +124,6 @@ datadg = {x: [freq], y:[0], r:[10]}
 datadp = {x: [freq], y:[0], r:[10]}
 
 
-
 function update_data()
 {
 
@@ -135,14 +134,14 @@ function update_data()
   dataxc.y = dataxc.x.map(t => cosf(t))
 
   for (var i = 0; i < datay.x.length; i++)
-          {
-               datay.y[i] = ir.reduce((a, hh, idx) => a + cosf(datay.x[i]-idx) * hh, 0)
-          }
+  {
+    datay.y[i] = ir.reduce((a, hh, idx) => a + cosf(datay.x[i]-idx) * hh, 0)
+  }
 
-          for (var i = 0; i < datayc.x.length; i++)
-          {
-              datayc.y[i] = ir.reduce((a, hh, idx) => a + cosf(datayc.x[i]-idx) * hh, 0)
-          }
+  for (var i = 0; i < datayc.x.length; i++)
+  {
+    datayc.y[i] = ir.reduce((a, hh, idx) => a + cosf(datayc.x[i]-idx) * hh, 0)
+  }
 
   Hdr = ir.reduce((a, hh, idx) => a + Math.cos( - 2 * Math.PI * freq * idx) * hh, 0)
   Hdi = ir.reduce((a, hh, idx) => a + Math.sin( - 2 * Math.PI * freq * idx) * hh, 0)
@@ -167,9 +166,6 @@ function update_freq()
 
 function select_ir()
 {
-
-
-
   ir = [...IR[this.value]]
   update_ir()
 }
@@ -181,17 +177,17 @@ function update_ir()
   datair.y = irplot
 
   for (var i = 0; i < nu.length; i++)
-    {
-               Hr[i] = ir.reduce((a, hh, idx) => a + Math.cos( - 2 * Math.PI * nu[i] * idx) * hh, 0)
-               Hi[i] = ir.reduce((a, hh, idx) => a + Math.sin( - 2 * Math.PI * nu[i] * idx) * hh, 0)
-    }
+  {
+    Hr[i] = ir.reduce((a, hh, idx) => a + Math.cos( - 2 * Math.PI * nu[i] * idx) * hh, 0)
+    Hi[i] = ir.reduce((a, hh, idx) => a + Math.sin( - 2 * Math.PI * nu[i] * idx) * hh, 0)
+  }
 
   datagain.y = Hr.map((t, idx) => Math.sqrt(t**2 + Hi[idx]**2))
   dataphase.y = Hr.map((t, idx) => Math.atan2(Hi[idx], t))
 
-stemir.update()
-lg.update()
-lp.update()
+  stemir.update()
+  lg.update()
+  lp.update()
 
   update()
 
@@ -206,15 +202,10 @@ function update()
 {
   update_data()
 
-
   linexc.update()
-
   stemx.update()
-
   lineyc.update()
-
   stemy.update()
-
   scatgain.update()
   scatphase.update()
 }
@@ -224,7 +215,7 @@ function drag_ir(i, x, y)
   idx = i - shift;
   if (idx < 0)
   {
-      return;
+    return;
   }
 
   if (idx > ir.length)
@@ -234,17 +225,6 @@ function drag_ir(i, x, y)
   ir[idx] = y;
   update_ir()
 
-}
-
-function reset()
-{
-  datax.y.fill(0)
-  datay.y.fill(0)
-  dataz.y.fill(0)
-
-    stemx.update()
-    stemy.update()
-    stemz.update()
 }
 
 stemir = axisir.stem("ir", "IR", datair, drag_ir)
@@ -268,22 +248,21 @@ lp = axisphase.line("phase", "", dataphase)
 d3.select('#freq').on("input", update_freq)
 d3.select('#filter').on("input", select_ir)
 
-
 irchoice = document.getElementById('filter')
 
 keys = (Object.keys(names))
 for (idin of keys)
 {
-opt = document.createElement("option")
-opt.value = idin
-opt.text =  names[idin]
+  opt = document.createElement("option")
+  opt.value = idin
+  opt.text =  names[idin]
 
-if (idin == "Dirac")
-{
-  opt.selected="selected"
+  if (idin == "Dirac")
+  {
+    opt.selected="selected"
 
-}
-irchoice.add(opt, null)
+  }
+  irchoice.add(opt, null)
 }
 
 
@@ -306,17 +285,8 @@ filterNode.buffer = filterbuffer;
 
 
 source.connect(filterNode);
-//
-// filter = audioCtx.createBiquadFilter()
-// BiquadFilterNode.frequency = 400
-// BiquadFilterNode.Q = 0.5
-// BiquadFilterNode.type = "low-pass"
-// BiquadFilterNode.gain = 1
-// source.connect(filter);
 
 filterNode.connect(audioCtx.destination);
-
-
 
 
 update()

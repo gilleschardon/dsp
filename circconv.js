@@ -23,10 +23,13 @@ xrange = [-0.5,L-0.5];
 yrange = [-2, 2]
 yrange2 = [-5, 5]
 
-axisx = new Axis("#plotx", "axx", 700, 150, margins, xrange, yrange)
-axisy = new Axis("#ploty", "axy", 700, 150, margins, xrange, yrange)
-axisz = new Axis("#plotz", "axz", 700, 300, margins, xrange, yrange2)
 
+ntickx = 20
+nticky = 5
+
+axisx = new Axis("#plotx", "x", 700, 150, margins, xrange, yrange, ntickx, nticky)
+axisy = new Axis("#ploty", "y", 700, 150, margins, xrange, yrange, ntickx, nticky)
+axisz = new Axis("#plotz", "z", 700, 300, margins, xrange, yrange2, ntickx, nticky*2)
 
 
 function update_data()
@@ -34,10 +37,10 @@ function update_data()
   dataz.y.fill(0)
   for (var k = 0 ; k < L ; k++)
   {
-       for (var l = 0 ; l < L ; l++)
-       {
-               dataz.y[(k+l)%L] = dataz.y[(k+l)%L] + datax.y[k] * datay.y[l]
-      }
+    for (var l = 0 ; l < L ; l++)
+    {
+      dataz.y[(k+l)%L] = dataz.y[(k+l)%L] + datax.y[k] * datay.y[l]
+    }
   }
 
 }
@@ -57,9 +60,9 @@ function reset()
   datay.y.fill(0)
   dataz.y.fill(0)
 
-    stemx.update()
-    stemy.update()
-    stemz.update()
+  stemx.update()
+  stemy.update()
+  stemz.update()
 }
 
 function updatex(i, x, y)

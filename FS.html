@@ -19,6 +19,10 @@
   .dftreal {color: blue}
   .dftimag {color: red}
 
+  .cos   {color: blue;  opacity: 0.2}
+  .sin   {color: red; opacity: 0.2}
+
+
   .line {stroke-width: 2px }
 
   .axis {
@@ -61,15 +65,33 @@ où les coefficients \(X_n\) sont donnés par
 avec convergence en norme \(L^2\) si \(x(t)\) est d'énergie finie.</p>
 
 
+<p>Observez :
+  <ul>
+    <li>le lien entre régularité du signal et décroissance des coefficients,</li>
+    <li>l'influence de l'amplitude des coefficients sur le signal,</li>
+    <li>l'effet de la troncature de la série</li>
+  </ul>
+
+<div>
   <input value="Reset" type="submit" id="reset"/>
   <input value="Square" type="submit" id="square"/>
   <input value="Triangle" type="submit" id="triangle"/>
   <input value="Sawtooth" type="submit" id="sawtooth"/>
   <input value="Pulse" type="submit" id="pulse"/>
+</div>
 
+<div>
+  Real: <input type="checkbox" id="real"/>
+</div>
+<div>
+  Truncation:
   <input value="1000" type="range" min="0" max="1000" id="truncation"/>
-
-
+</div>
+<div>
+  <input value="Play (if real)" type="submit" id="play"/>
+  <input value="Stop" type="submit" id="stop"/>
+  \(f_0\) : <input value="100" type="range" min="0" max="1000" id="f0"/>
+</div>
   <div id="plotsig"></div>
   <div id="plotdft"></div>
 

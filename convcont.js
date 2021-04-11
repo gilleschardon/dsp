@@ -2,7 +2,7 @@
 
 var margins = {
   left: 50,
-  right: 110,
+  right: 120,
   bottom: 10,
   top: 10
 };
@@ -10,11 +10,10 @@ var margins = {
 xrange = [-5, 5]
 yrange = [-2, 2]
 
- ntickx =  10
- nticky =  10
+ntickx =  10
+nticky =  10
 
 axisin1 = new Axis("#plotin1", "ax1", 380, 200, margins, xrange, yrange, ntickx, nticky)
-
 axisin2 = new Axis("#plotin2", "ax2", 380, 200, margins, xrange, yrange, ntickx, nticky)
 axisprod = new Axis("#plotprod", "axprod", 380, 200, margins, xrange, yrange, ntickx, nticky)
 axisout = new Axis("#plotout", "axz", 380, 200, margins, xrange, yrange, ntickx, nticky)
@@ -39,7 +38,6 @@ const names = {
 }
 
 square = t.map( t=> (Math.abs(t) < 0.5 ? 1 : 0))
-
 expm = t.map(t => t <0 ? 0 : Math.exp(-t))
 expp = t.map(t => t >0 ? 0 : Math.exp(t))
 heaviside = t.map(t => t >0 ? 1 : 0)
@@ -55,19 +53,13 @@ const inputs = {
 
 
 var datain1 = {x:t, y:square}
-
 var datain2 = {x:t, y:square}
 
 var dataprod = {x:t, y:Array(L).fill(0)}
-
-
 var datain1B = {x:t, y:[...datain1.y]}
-
 var datain2B = {x:t, y:Array(L).fill(0)}
 var dataprod = {x:t, y:Array(L).fill(0)}
-
 var dataout = {x:[], y:[], r:[]}
-
 var datacurrent = {x:[0], y:[0], r:[10]}
 
 
@@ -78,34 +70,30 @@ var shift = 0
 function update_delay()
 {
   shift = parseInt(this.value);
-
-
-
   update()
 }
 
 function update_data()
 {
   datain1B.y = datain1.y
-
   datain2B.y.fill(0)
 
   for (var k = 0; k < L ; k++)
   {
-   if (((L - 1) + shift - k > -1) &  ((L - 1) + shift - k < L))
-   {
-     datain2B.y[k] = datain2.y[(L - 1) + shift - k]
-     dataprod.y[k] = datain2B.y[k] * datain1.y[k]
+    if (((L - 1) + shift - k > -1) &  ((L - 1) + shift - k < L))
+    {
+      datain2B.y[k] = datain2.y[(L - 1) + shift - k]
+      dataprod.y[k] = datain2B.y[k] * datain1.y[k]
     }
   }
 
-ss = dataprod.y.reduce((t, c) => (t+c)) * step
+  ss = dataprod.y.reduce((t, c) => (t+c)) * step
   dataout.x.push(shift*step)
   dataout.y.push(ss)
   dataout.r.push(R)
 
-datacurrent.x = [shift*step]
-datacurrent.y = [ss]
+  datacurrent.x = [shift*step]
+  datacurrent.y = [ss]
 }
 
 function update_in1()
@@ -139,23 +127,17 @@ function update()
   scattercurrent.update()
 
 }
-function reset()
-{
-
-}
-
 
 line1 = axisin1.line("in1", "\\(x(t)\\)", datain1)
 line2 = axisin2.line("in2", "\\(y(t)\\)", datain2)
 
 line1B = axisprod.line("in1", "\\(x(t)\\)", datain1B)
-line2B = axisprod.line("in2", "\\(y(u-t)\\)", datain2B)
+line2B = axisprod.line("in2", "\\(y(u_0-t)\\)", datain2B)
 lineprod = axisprod.area("prod", "\\(x(t)y(u_0-t)\\)", dataprod)
 scatterout = axisout.scatter("prod", "\\(z(u)\\)", dataout)
 scattercurrent = axisout.scatter("current", "\\(z(u_0)\\)", datacurrent)
 
 d3.select('#delay').on("input", update_delay)
-
 d3.select('#in1').on("input", update_in1)
 d3.select('#in2').on("input", update_in2)
 
@@ -166,21 +148,21 @@ in2 = document.getElementById('in2')
 keys = (Object.keys(names))
 for (idin of keys)
 {
-opt1 = document.createElement("option")
-opt1.value = idin
-opt1.text =  names[idin]
+  opt1 = document.createElement("option")
+  opt1.value = idin
+  opt1.text =  names[idin]
 
-opt2 = document.createElement("option")
-opt2.value = idin
-opt2.text =  names[idin]
-if (idin == "rect")
-{
-  opt1.selected="selected"
-  opt2.selected="selected"
-
+  opt2 = document.createElement("option")
+  opt2.value = idin
+  opt2.text =  names[idin]
+  if (idin == "rect")
+  {
+    opt1.selected="selected"
+    opt2.selected="selected"
+  }
+  in1.add(opt1, null)
+  in2.add(opt2, null)
 }
-in1.add(opt1, null)
-in2.add(opt2, null)
 
-}
+
 update()

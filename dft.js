@@ -1,8 +1,4 @@
 
-
-ir = [1,-1]
-
-
 var margins = {
   left: 50,
   right: 200,
@@ -49,13 +45,12 @@ function updatesig(i, x, y, data)
   data.y[i] = y
 
   for (var i = 0; i < L; i++)
-    {
-               datadftreal.y[i] = datasigreal.y.reduce((a, hh, idx) => a + Math.cos( - 2 * Math.PI * i * idx / L) * hh, 0)
-               datadftreal.y[i] = datasigimag.y.reduce((a, hh, idx) => a - Math.sin( - 2 * Math.PI * i * idx / L) * hh, datadftreal.y[i])
-               datadftimag.y[i] = datasigreal.y.reduce((a, hh, idx) => a + Math.sin( - 2 * Math.PI * i * idx / L) * hh, 0)
-               datadftimag.y[i] = datasigimag.y.reduce((a, hh, idx) => a + Math.cos( - 2 * Math.PI * i * idx / L) * hh, datadftimag.y[i])
-
-    }
+  {
+    datadftreal.y[i] = datasigreal.y.reduce((a, hh, idx) => a + Math.cos( - 2 * Math.PI * i * idx / L) * hh, 0)
+    datadftreal.y[i] = datasigimag.y.reduce((a, hh, idx) => a - Math.sin( - 2 * Math.PI * i * idx / L) * hh, datadftreal.y[i])
+    datadftimag.y[i] = datasigreal.y.reduce((a, hh, idx) => a + Math.sin( - 2 * Math.PI * i * idx / L) * hh, 0)
+    datadftimag.y[i] = datasigimag.y.reduce((a, hh, idx) => a + Math.cos( - 2 * Math.PI * i * idx / L) * hh, datadftimag.y[i])
+  }
 
   stemsigreal.update()
   stemsigimag.update()
@@ -69,12 +64,12 @@ function updatefreq(i, x, y, data)
   data.y[i] = y
 
   for (var i = 0; i < L; i++)
-    {
-               datasigreal.y[i] = datadftreal.y.reduce((a, hh, idx) => a + Math.cos(  2 * Math.PI * i * idx / L) * hh, 0)
-               datasigreal.y[i] = datadftimag.y.reduce((a, hh, idx) => a - Math.sin(  2 * Math.PI * i * idx / L) * hh, datasigreal.y[i]) / L
-               datasigimag.y[i] = datadftreal.y.reduce((a, hh, idx) => a + Math.sin(  2 * Math.PI * i * idx / L) * hh, 0)
-               datasigimag.y[i] = datadftimag.y.reduce((a, hh, idx) => a + Math.cos(  2 * Math.PI * i * idx / L) * hh, datasigimag.y[i]) / L
-    }
+  {
+    datasigreal.y[i] = datadftreal.y.reduce((a, hh, idx) => a + Math.cos(  2 * Math.PI * i * idx / L) * hh, 0)
+    datasigreal.y[i] = datadftimag.y.reduce((a, hh, idx) => a - Math.sin(  2 * Math.PI * i * idx / L) * hh, datasigreal.y[i]) / L
+    datasigimag.y[i] = datadftreal.y.reduce((a, hh, idx) => a + Math.sin(  2 * Math.PI * i * idx / L) * hh, 0)
+    datasigimag.y[i] = datadftimag.y.reduce((a, hh, idx) => a + Math.cos(  2 * Math.PI * i * idx / L) * hh, datasigimag.y[i]) / L
+  }
 
   stemsigreal.update()
   stemsigimag.update()
@@ -98,8 +93,6 @@ function reset()
 
 symbolreal = "M 0 1 L -1 0 L 0 -1 Z"
 symbolimag = "M 0 1 L 1 0 L 0 -1 Z"
-
-
 
 stemsigreal = axissig.stem("sigreal", "\\(\\Re x_n\\)", datasigreal, (i, x, y) => updatesig(i, x, y, datasigreal), symbolreal)
 stemsigimag = axissig.stem("sigimag", "\\(\\Im x_n\\)", datasigimag, (i, x, y) => updatesig(i, x, y, datasigimag), symbolimag)

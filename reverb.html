@@ -17,13 +17,9 @@
   .ir  {
     color: #f66;
   }
-  .in   {color: blue;}
-  .out   {color: red;}
-  .gain {color: blue}
-  .phase {color: red}
 
-  .line {stroke-width: 2px}
-  .in .line, .out .line {opacity: 0.2}
+
+
 
   .axis {
     opacity: 1;
@@ -49,10 +45,6 @@
     stroke: #999;
   }
 
-  #plotgain, #plotphase
-  {
-    display: inline-block;
-  }
 
   </style>
 </head>
@@ -60,11 +52,19 @@
 <body>
   <h1>Réverbération</h1>
 
+  <p>La réverbération dans une salle peut se modéliser par la convolution d'un signal sonore avec la réponse impulsionnelle de la salle.
+    Différents effets sont proposés ici :
+    <ul>
+      <li>Aucun effet : la réponse impulsionnelle est une impulsion à \(t=0\) d'amplitude 1.</li>
+      <li>Echo unique : une impulsion est rajoutée à la réponse, modélisant un écho retardé et attenué.</li>
+      <li>Echos multiples : plusieurs impulsions, d'amplitude décroissante exponentiellement, modélisent plusieurs échos espacés uniformément.</li>
+      <li>Réverbération artificielle : des réflexions de retards et d'amplitudes variés simulent la réverbération dans une salle.</li>
+    </ul>
+    Les impulsions peuvent être déplacées pour tester différentes configurations.</p>
 
+  <p>Effet : <select id="filter"></select></p>
+  <p><audio controls src="ratp_8_pad.wav"></audio></p>
 
-    <audio controls src="ratp_8_pad.wav"></audio>
-
-  <select id="filter"></select>
 
   <div id="plotir"></div>
 

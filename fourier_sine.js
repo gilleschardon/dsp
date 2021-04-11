@@ -95,14 +95,11 @@ symbolreal = "M 0 1 L -1 0 L 0 -1 Z"
 symbolimag = "M 0 1 L 1 0 L 0 -1 Z"
 
 
-stemsigreal = axissig.line("sigreal", "\\(\\Re x[n]\\)", datasigreal)
-stemsigimag = axissig.line("sigimag", "\\(\\Im x[n]\\)", datasigimag)
-stemPR = axisdft.stem("PR", "\\(\\Re X[k]\\)", dataPR, updatePR, symbolreal)
-stemPI = axisdft.stem("PI", "\\(\\Im X[k]\\)", dataPI, updatePI, symbolimag)
-stemNR = axisdft.stem("NR", "\\(\\Re X[k]\\)", dataNR, updateNR, symbolreal)
-stemNI = axisdft.stem("NI", "\\(\\Im X[k]\\)", dataNI, updateNI, symbolimag)
-
-
-
+stemsigreal = axissig.line("sigreal", "\\(\\Re x(t)\\)", datasigreal)
+stemsigimag = axissig.line("sigimag", "\\(\\Im x(t)\\)", datasigimag)
+stemPR = axisdft.stem("PR", "\\(\\Re\\)", dataPR, updatePR, symbolreal)
+stemPI = axisdft.stem("PI", "\\(\\Im\\)", dataPI, updatePI, symbolimag)
+stemNR = axisdft.stem("NR", "", dataNR, updateNR, symbolreal)
+stemNI = axisdft.stem("NI", "", dataNI, updateNI, symbolimag)
 
 update()

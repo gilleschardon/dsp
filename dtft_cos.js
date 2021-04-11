@@ -9,7 +9,7 @@ var margins = {
 
 
 var resol = 400
-var freq = 1;
+var freq = 0;
 var T = 20
 
 var t = [...Array(2*resol).keys()].map((t) => (t-resol)/resol * T)

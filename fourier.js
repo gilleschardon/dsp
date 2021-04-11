@@ -65,6 +65,7 @@ params = {
 }
 
 paramshtml = d3.select("#params")
+
 for (param of Object.keys(params))
 {
   var value = Math.ceil(((params[param].value - params[param].min) / (params[param].max - params[param].min) * 100))

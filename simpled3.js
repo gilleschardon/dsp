@@ -177,7 +177,7 @@ stem(id, tag, data, drag_update = null, symbol = d3.symbol().size(1).type(d3.sym
     return new Line(g, data, this.scalex, this.scaley)
   }
   area(id, tag, data) {
-    var g = this.svg.append("g").attr("class", id).attr("clip-path", "url(" + this.id + "clip)")
+    var g = this.svg.append("g").attr("class", id).attr("clip-path", "url(#" + this.id + "clip)")
     return new Area(g, data, this.scalex, this.scaley)
 
 

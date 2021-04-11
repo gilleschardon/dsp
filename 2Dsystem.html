@@ -1,3 +1,4 @@
+
 <!doctype html>
 
 <html lang="en">
@@ -6,7 +7,7 @@
 
   <meta charset="utf-8">
 
-  <title>Transformée de Fourier discrète</title>
+  <title>Transformée de Fourier</title>
 
 
   <link rel="stylesheet" href="styles.css">
@@ -14,10 +15,15 @@
   <style>
 
 
-  .sigreal {color: blue;}
-  .sigimag {color: red;}
-  .dftreal {color: blue}
-  .dftimag {color: red}
+  .x  {color: blue;}
+  .y  {color: red;}
+  .line {stroke-width: 2px }
+
+
+  #plot {display: inline-block}
+  #plot > svg{display: block}
+
+  #plotxy {display: inline-block}
 
   .axis {
     opacity: 1;
@@ -44,25 +50,27 @@
   }
 
 
+
   </style>
 </head>
 
 <body>
-<h1> Transformée de Fourier discrète </h1>
-  <p>La transformée de Fourier discrète \(\mathbf X\) d'un vecteur \(\mathbf x\) de dimension \(N\) est donnée par ses coefficients :
-    \[
-    X_k = \sum_{n=0}^{N-1} \exp\left(- i 2 \pi n \frac{k}{N}\right) x_n
-    \]
-  </p>
+<h1>Linear differential system</h1>
+<div id="params"><p><button id="start">Start</p><p>
 
-  <input value="Reset" type="submit" id="reset"/>
+  <!-- <div id="params"><p><button id="step">Step</p><p> -->
+  </div>
+  <!-- <p>Width<input class="slider" type="range" min="0" max="100" value="50" id="width"></input></p>
+  <p>Center<input class="slider" type="range" min="0" max="100" value="50" id="center"></input></p> -->
 
-  <div id="plotsig"></div>
-  <div id="plotdft"></div>
+  <div id="plot"></div>
+  <div id="plotxy"></div>
+
 
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="simpled3.js"></script>
-  <script src="dft.js"></script>
+  <script src="math.js" type="text/javascript"></script>
+  <script src="2Dsystem.js"></script>
 <script> window.MathJax.typeset()</script>
 </body>
 </html>

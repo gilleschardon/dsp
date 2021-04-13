@@ -29,11 +29,12 @@ var margins = {
   bottom: 10,
   top: 10
 };
+Fs = 44100/4;
 
-xrange = [00, Lsigs]
+xrange = [00, Lsigs/Fs]
 yrange = [-2, 2]
 
-xrange2 = [-Lsigs, Lsigs]
+xrange2 = [-Lsigs/Fs, Lsigs/Fs]
 yrange2 = [-Lsigs/2, Lsigs/2]
 
 ntickx =  10
@@ -55,14 +56,13 @@ var step = Tmax/l
 t = [...Array(L).keys()].map(t => (t/L*2*Tmax - Tmax))
 
 
+var datain1 = {x:[...Array(samples.length).keys()].map(t=>t/Fs), y:samples}
+var datain2 = {x:[...Array(samples.length).keys()].map(t=>t/Fs), y:samples}
 
-var datain1 = {x:[...Array(samples.length).keys()].map(t=>t), y:samples}
-var datain2 = {x:[...Array(samples.length).keys()].map(t=>t), y:samples}
 
-
-var dataprod = {x:[...Array(samples.length).keys()].map(t=>t), y:Array(l).fill(0)}
-var datain1B = {x:[...Array(samples.length).keys()].map(t=>t), y:[...datain1.y]}
-var datain2B = {x:[...Array(samples.length).keys()].map(t=>t), y:[...datain1.y]}
+var dataprod = {x:[...Array(samples.length).keys()].map(t=>t/Fs), y:Array(l).fill(0)}
+var datain1B = {x:[...Array(samples.length).keys()].map(t=>t/Fs), y:[...datain1.y]}
+var datain2B = {x:[...Array(samples.length).keys()].map(t=>t/Fs), y:[...datain1.y]}
 var dataout = {x:[], y:[], r:[]}
 var datacurrent = {x:[0], y:[0], r:[10]}
 
@@ -109,11 +109,11 @@ function update_data()
   }
 
   ss = dataprod.y.reduce((t, c) => (t+c)) * step
-  dataout.x.push(shift*step)
+  dataout.x.push(shift*step/Fs)
   dataout.y.push(ss)
   dataout.r.push(R)
 
-  datacurrent.x = [shift*step]
+  datacurrent.x = [shift*step/Fs]
   datacurrent.y = [ss]
 }
 

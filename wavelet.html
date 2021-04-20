@@ -6,7 +6,7 @@
 
   <meta charset="utf-8">
 
-  <title>Discrete Fourier Transform</title>
+  <title></title>
 
 
   <link rel="stylesheet" href="styles.css">
@@ -14,10 +14,11 @@
   <style>
 
 
-  .sigreal {color: blue;}
-  .sigimag {color: red;}
-  .dftreal {color: blue}
-  .dftimag {color: red}
+  .wave   {color: blue;}
+  .wavedot   {color: blue; opacity: 0.5}
+  .scale   {color: red;}
+  .scaledot   {color: red; opacity: 0.5}
+  .line {stroke-width: 2px }
 
   .axis {
     opacity: 1;
@@ -44,27 +45,27 @@
   }
 
 
+
   </style>
 </head>
 
 <body>
-<h1> Discrete Fourier Transform </h1>
-  <p>The discrete Fourier transform \(\mathbf X\) of a vector \(\mathbf x\) of dimension \(N\) is given by its coefficients:
-    \[
-    X_k = \sum_{n=0}^{N-1} \exp\left(- i 2 \pi n \frac{k}{N}\right) x_n
-    \]
-  </p>
 
-  <input value="Reset" type="submit" id="reset"/>
+<h1></h1>
 
-  <div id="plotsig"></div>
-  <div id="plotdft"></div>
+
+  <div id="params">
+  </div>
+  <p><input value="0" type="range" id="K" min="1" max="10"/><p>
+   <p><select id="wavelet"></select></p>
+
+  <div id="plotscale"></div>
+  <div id="plotwave"></div>
 
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="simpled3.js"></script>
   <script src="signal.js"></script>
-
-  <script src="dft.js"></script>
+  <script src="wavelet.js"></script>
 <script> window.MathJax.typeset()</script>
 </body>
 </html>

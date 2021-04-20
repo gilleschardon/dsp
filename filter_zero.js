@@ -37,7 +37,7 @@ R = 10
 var r = Array(L).fill(R)
 
 
-Nfreq = 1000
+Nfreq = 1024
 
 var nu = [...Array(Nfreq).keys()].map(t => (t/Nfreq*1.5-0.5))
 var Hr = Array(Nfreq).fill(0)
@@ -49,6 +49,7 @@ for (var i = 0; i < nu.length; i++)
              Hr[i] = ir.reduce((a, hh, idx) => a + Math.cos( - 2 * Math.PI * nu[i] * idx) * hh, 0)
              Hi[i] = ir.reduce((a, hh, idx) => a + Math.sin( - 2 * Math.PI * nu[i] * idx) * hh, 0)
   }
+
 
 Hgain = Hr.map((t, idx) => Math.sqrt(t**2 + Hi[idx]**2))
 
@@ -86,16 +87,14 @@ function update_data()
   datadft.r = Array(+Lzero).fill(R)
   datadft.y = Array(+Lzero).fill(0)
 
-  for (var i = 0; i < Lzero; i++)
-    {
+   for (var i = 0; i < Lzero; i++)
+     {
 
-      RR = ir.reduce((a, hh, idx) => a + Math.cos( - 2 * Math.PI * (i-shift) * (idx/ Lzero)) * hh, 0)
-      II = ir.reduce((a, hh, idx) => a + Math.sin( - 2 * Math.PI * (i-shift) * (idx/ Lzero)) * hh, 0)
+       RR = ir.reduce((a, hh, idx) => a + Math.cos( - 2 * Math.PI * (i-shift) * (idx/ Lzero)) * hh, 0)
+       II = ir.reduce((a, hh, idx) => a + Math.sin( - 2 * Math.PI * (i-shift) * (idx/ Lzero)) * hh, 0)
 
-      datadft.y[i] = Math.sqrt(RR**2 + II**2)
-
+       datadft.y[i] = Math.sqrt(RR**2 + II**2)
     }
-
 
 
 }

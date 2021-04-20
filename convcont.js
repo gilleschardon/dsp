@@ -96,6 +96,7 @@ function update_data()
   {
     for (var i = shift + stepsamp ; i != newshift + stepsamp; i += stepsamp)
     {
+      console.log(i)
       datain2B.y.fill(0)
 
       // this is where the convolution is computed
@@ -214,6 +215,31 @@ scattercurrent = axisout.scatter("current", "\\(z(u_0)\\)", datacurrent, update_
 d3.select('#in1').on("input", update_in1)
 d3.select('#in2').on("input", update_in2)
 
+document.addEventListener('keydown', keypress)
+
+function keypress(e)
+{
+  if (e.code == "ArrowRight" && e.ctrlKey)
+  {
+    newshift = shift+10
+    update()
+  }
+  else if (e.code == "ArrowLeft" && e.ctrlKey)
+  {
+    newshift = shift-10
+    update()
+  }
+  else if (e.code == "ArrowRight")
+  {
+    newshift = shift+1
+    update()
+  }
+  else if (e.code == "ArrowLeft")
+  {
+    newshift = shift-1
+    update()
+  }
+}
 // populating the options
 
 in1 = document.getElementById('in1')

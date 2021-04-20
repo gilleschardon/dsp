@@ -6,7 +6,7 @@
 
   <meta charset="utf-8">
 
-  <title>Discrete Fourier Transform</title>
+  <title>Fourier transform</title>
 
 
   <link rel="stylesheet" href="styles.css">
@@ -14,10 +14,12 @@
   <style>
 
 
-  .sigreal {color: blue;}
-  .sigimag {color: red;}
-  .dftreal {color: blue}
-  .dftimag {color: red}
+  .sigreal   {color: blue;}
+  .sigimag   {color: red;}
+  .fourierreal {color: blue}
+  .fourierimag {color: red}
+
+  .line {stroke-width: 2px }
 
   .axis {
     opacity: 1;
@@ -44,27 +46,24 @@
   }
 
 
+
   </style>
 </head>
 
 <body>
-<h1> Discrete Fourier Transform </h1>
-  <p>The discrete Fourier transform \(\mathbf X\) of a vector \(\mathbf x\) of dimension \(N\) is given by its coefficients:
-    \[
-    X_k = \sum_{n=0}^{N-1} \exp\left(- i 2 \pi n \frac{k}{N}\right) x_n
-    \]
-  </p>
 
-  <input value="Reset" type="submit" id="reset"/>
+  <p>\(\lambda\)<input class="slider" type="range" min="-40" max="20" value="0" step="0.1" id="lambda"></input></p>
 
-  <div id="plotsig"></div>
-  <div id="plotdft"></div>
+  <div id="plotx"></div>
+  <div id="ploty"></div>
+  <div id="lcurve"></div>
+  <div id="err"></div>
 
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="simpled3.js"></script>
   <script src="signal.js"></script>
 
-  <script src="dft.js"></script>
+  <script src="tikhonov.js"></script>
 <script> window.MathJax.typeset()</script>
 </body>
 </html>

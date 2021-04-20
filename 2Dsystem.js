@@ -16,7 +16,7 @@ Mstep = math.expm(math.multiply(step, M))
 
 MM = Mstep
 
-initial = [[0.1,0.1], [0.2, 0.3]]
+initial = [0.1,0.1]
 
 var X = math.matrix(initial)
 

@@ -15,14 +15,21 @@ var L = 256
 rdn = d3.randomNormal(0, 1)
 
 var t = [...Array(L).keys()]
+uu = [...Array(44).keys()].map(t => t/44 * 2 - 1)
+
 //var x = t.map((t) => -1 + (1 - Math.cos(2*Math.PI * t / L))**8/64 + Math.cos(2*Math.PI * t * 16/ L) + 0.4* Math.cos(2*Math.PI * t * 7/ L)- 0.3* Math.cos(2*Math.PI * t * 21/ L) + rdn())
 //var x = t.map((t) =>  + Math.cos(2*Math.PI * t * 3/ L) + 0.4* Math.cos(2*Math.PI * t * 7/ L)- 0.3* Math.cos(2*Math.PI * t * 21/ L) + rdn())
 
 var x = []
 x.push(...Array(40).fill(0))
-x.push(...Array(44).fill(1))
-x.push(...Array(88).fill(-1))
-x.push(...Array(44).fill(1))
+x.push(...Array(44).fill(0.5))
+x.push(...Array(22).fill(-2))
+x.push(...Array(22).fill(1.5))
+x.push(...Array(22).fill(-1))
+x.push(...uu)
+//x.push(...Array(22).fill(1))
+
+x.push(...Array(22).fill(1))
 x.push(...Array(40).fill(0))
 
 y = x.map(t => t+ rdn())

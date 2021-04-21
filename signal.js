@@ -109,3 +109,97 @@ function ifft(real, imag)
   }
   return IF
 }
+
+function proxtv(y, lam)
+{
+    var N = y.length
+
+    var x = Array(N).fill(0)
+
+    var k = 0
+    var kp = 0
+    var km = 0
+    var k0 = 0
+
+    var vmin = y[0] - lam
+    var vmax = y[0] + lam
+    var umin = lam
+    var umax = - lam
+
+    while(k < N - 1)
+    {
+        if (y[k+1] + umin < vmin - lam)
+        {
+            x.splice(k0, km-k0 + 1, ...Array(km-k0 + 1).fill(vmin))
+            k = km + 1
+            kp = k
+            km = k
+            k0 = k
+            vmin = y[k]
+            vmax = y[k] + 2 *lam
+            umin = lam
+            umax = -lam
+       }
+       else if (y[k+1] + umax > vmax + lam)
+       {
+            x.splice(k0, kp-k0 + 1, ...Array(kp-k0 + 1).fill(vmax))
+            k = kp + 1
+            kp = k
+            km = k
+            k0 = k
+            vmin = y[k] - 2 * lam
+            vmax = y[k]
+            umin = lam
+            umax = -lam
+       }
+       else
+       {
+
+            k = k + 1
+            umin = umin + y[k] - vmin
+            umax = umax + y[k] - vmax
+            if (umin >= lam)
+            {
+                vmin = vmin + (umin - lam)/(k-k0 + 1)
+                umin = lam
+                km = k
+            }
+            if (umax <= - lam)
+            {
+                vmax = vmax + (umax + lam)/(k-k0 + 1)
+                umax = - lam
+                kp = k
+            }
+        if (k == N - 1)
+        {
+            if (umin < 0)
+            {
+                x.splice(k0, km-k0 + 1, ...Array(km-k0 + 1).fill(vmin))
+                k = km + 1
+                km = k
+                k0 = k
+                vmin = y[k]
+                umin = lam
+                umax = y[k] + lam - vmax
+            }
+            else if (umax > 0)
+            {
+                x.splice(k0, kp-k0 + 1, ...Array(kp-k0 + 1).fill(vmax))
+                k = kp + 1
+                kp = k
+                k0 = k
+                vmax = y[k]
+                umax = - lam
+                umin = y[k] - lam - vmin
+            }
+            else
+            {
+                x.splice(k0, N - k0 + 1, ...Array(N-k0 + 1).fill(vmin + umin / (k-k0+1)))
+                return x
+            }
+          }
+       }
+     }
+    x[k] = vmin + umin
+    return x
+}

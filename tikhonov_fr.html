@@ -56,26 +56,27 @@
 </head>
 
 <body>
-  <h1>Tikhonov regularization</h1>
+  <h1>Régularisation de Tikhonov</h1>
 
 <p>
+  La régularisation de Tikhonov est une méthode simple pour traiter des problèmes inverses mal conditionnés.
   The Tikhonov regularization is a simple method to deal with ill-conditionned inverse problems.
 
-  The measured data \(y\) is modeled by
+  Les données \(y\) dont modélisées par
   \[ y = Hx + n\]
-  where \(n\) is a measurement noise, usually assumed white and gaussian.
+  où  \(n\) est une bruit de mesure, supposé blanc et gaussien.
 
-  The estimate \(\hat x_\lambda\) is found by solving the optimization problem
+  L'estimation \(\hat x_\lambda\) est obtenue en résolvant le problème de minimisation
     \[
     \hat x_\lambda = \mathrm{argmin}_x \|y - Hx\|_2^2 + \lambda \|\Gamma x\|_{2}^2
     \]
-    where \(\Gamma\) is matrix modeling priori information about \(x\), and \(\lambda\) is the regularization parameter.
+    où \(\Gamma\) est une matrice modélisant l'information a priori disponible sur  \(x\), et \(\lambda\) est le paramètre de régularisation.
 </p>
 
-  <p>Here, \(\Gamma\) is chosen to be the identity operator, first derivative, or second derivative</p>
+  <p>Ici, On choisit pour \(\Gamma\) l'identité, la dérivée première ou la dérivée seconde. </p>
 
 
-  <p>Filter: <select id="filter"></select></p>
+  <p>Filtre: <select id="filter"></select></p>
 
   <p>\(\lambda\)<input class="slider" type="range" min="0" max="100" value="0" step="1" id="lambda"></input></p>
 

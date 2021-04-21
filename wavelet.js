@@ -5,7 +5,8 @@ h = {
   db2: [0.4829, 0.8365, 0.2241, -0.1294],
   db3: [0.3327, 0.8069, 0.4599, -0.1350, -0.0854, 0.0352],
   db4: [0.2304, 0.7148, 0.6309, -0.0280, -0.1870, 0.0308, 0.0329, -0.0106],
-  sym4: [0.0322, -0.0126, -0.0992, 0.2979, 0.8037, 0.4976, -0.0296, -0.0758]
+  sym4: [0.0322, -0.0126, -0.0992, 0.2979, 0.8037, 0.4976, -0.0296, -0.0758],
+  C6: [-0.1029, 0.4779, 1.206, 0.5443, -0.1029,-0.0221].map(t =>t/Math.sqrt(2))
 }
 
 names =
@@ -14,7 +15,8 @@ names =
   db2: "db2",
   db3: "db3",
   db4: "db4",
-  sym4: "sym4"
+  sym4: "sym4",
+  C6: "C6"
 }
 
 var margins = {
@@ -96,9 +98,9 @@ function update()
 
 
 scaledot = axisscale.scatter("scaledot", "", datascale)
-scaleline = axisscale.line("scale", "scale", datascale)
+scaleline = axisscale.line("scale", "\\(\\phi(t)\\)", datascale)
 wavedot = axiswave.scatter("wavedot", "", datawave)
-waveline = axiswave.line("wave", "wave", datawave)
+waveline = axiswave.line("wave", "\\(\\psi(t)\\)", datawave)
 
 d3.select('#K').on("input", updateK)
 d3.select('#wavelet').on("input", updatewavelet)

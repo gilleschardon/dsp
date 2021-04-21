@@ -6,7 +6,7 @@
 
   <meta charset="utf-8">
 
-  <title>Total Variation denoising</title>
+  <title>Débruitage par variation totale</title>
 
 
   <link rel="stylesheet" href="styles.css">
@@ -61,19 +61,19 @@
 
 <body>
 
-  <h1>Total variation denoising</h1>
+  <h1>Débruitage par variation totale</h1>
 
 <p>
-  A noisy signal \(y = x + n\) can be denoised, under the assumption that \(x\) is piecewise constant, by solving the problem
+  Un signal bruité \(y = x + n\) peut être débruité, sous l'hypothèse que \(x\) soit constant par morceaux, en résolvant le problème de minimisation
 
   \[
   \hat x_\lambda = \mathrm{argmin}_x \|y - x\|_2^2 + \lambda \|Dx\|_{1}
   \]
-  where \(Dx\) denotes the discrete derivative of \(x\).
+  où \(Dx\) est la dérivée discrète de \(x\).
 </p>
 
-<p> The bottom graph demonstrates the <em>taut string</em> interpretation of TV denoising, where \(Y\) is the cumulative sum of \(y\).
-\(\hat x_\lambda\) is then found as the discrete derivative of \(\hat X_\lambda\).</p>
+<p> Le graphe du bas donne l'interprétation du débruitage par variation totale comme une corde tendue. \(Y\) est la somme cumulée de \(y\), et
+\(\hat x_\lambda\) est obtenu comme la dérivée discrète de  \(\hat X_\lambda\).</p>
 
   <p>\(\lambda\)<input class="slider" type="range" min="0" max="40" value="0" step="0.1" id="lambda"></input></p>
 

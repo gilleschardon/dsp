@@ -1,4 +1,6 @@
 
+
+
 var margins = {
   left: 50,
   right: 200,
@@ -7,7 +9,8 @@ var margins = {
 };
 
 var L = 8
-var resol = 10
+
+const FFT = new FFTNayuki(L)
 
 var t = [...Array(L).keys()]
 
@@ -16,7 +19,6 @@ var sigimag = Array(L).fill(0)
 var dftreal = Array(L).fill(0)
 var dftimag = Array(L).fill(0)
 
-
 var r = Array(t.length).fill(15)
 
 
@@ -24,7 +26,6 @@ datasigreal = {x: t, y:sigreal, r: r}
 datasigimag = {x: t, y:sigimag, r: r}
 datadftreal = {x: t, y:dftreal, r: r}
 datadftimag = {x: t, y:dftimag, r: r}
-
 
 xrange = [-0.5,L + 0.5];
 yrangesig = [-5, 5]
@@ -44,23 +45,14 @@ function updatesig(i, x, y, data)
 {
   data.y[i] = y
 
-  // for (var i = 0; i < L; i++)
-  // {
-  //   datadftreal.y[i] = datasigreal.y.reduce((a, hh, idx) => a + Math.cos( - 2 * Math.PI * i * idx / L) * hh, 0)
-  //   datadftreal.y[i] = datasigimag.y.reduce((a, hh, idx) => a - Math.sin( - 2 * Math.PI * i * idx / L) * hh, datadftreal.y[i])
-  //   datadftimag.y[i] = datasigreal.y.reduce((a, hh, idx) => a + Math.sin( - 2 * Math.PI * i * idx / L) * hh, 0)
-  //   datadftimag.y[i] = datasigimag.y.reduce((a, hh, idx) => a + Math.cos( - 2 * Math.PI * i * idx / L) * hh, datadftimag.y[i])
-  // }
+  let real = Float32Array.from(datasigreal.y)
+  let imag = Float32Array.from(datasigimag.y)
+  FFT.forward(real, imag)
 
-  F = fft(datasigreal.y, datasigimag.y)
-  datadftreal.y = F.real
-  datadftimag.y = F.imag
+  datadftreal.y = real
+  datadftimag.y = imag
 
-
-  stemsigreal.update()
-  stemsigimag.update()
-  stemdftreal.update()
-  stemdftimag.update()
+  update()
 }
 
 
@@ -68,22 +60,14 @@ function updatefreq(i, x, y, data)
 {
   data.y[i] = y
 
-  // for (var i = 0; i < L; i++)
-  // {
-  //   datasigreal.y[i] = datadftreal.y.reduce((a, hh, idx) => a + Math.cos(  2 * Math.PI * i * idx / L) * hh, 0)
-  //   datasigreal.y[i] = datadftimag.y.reduce((a, hh, idx) => a - Math.sin(  2 * Math.PI * i * idx / L) * hh, datasigreal.y[i]) / L
-  //   datasigimag.y[i] = datadftreal.y.reduce((a, hh, idx) => a + Math.sin(  2 * Math.PI * i * idx / L) * hh, 0)
-  //   datasigimag.y[i] = datadftimag.y.reduce((a, hh, idx) => a + Math.cos(  2 * Math.PI * i * idx / L) * hh, datasigimag.y[i]) / L
-  // }
+  let real = Float32Array.from(datadftreal.y)
+  let imag = Float32Array.from(datadftimag.y)
+  FFT.inverse(real, imag)
 
-  F = ifft(datadftreal.y, datadftimag.y)
-  datasigreal.y = F.real
-  datasigimag.y = F.imag
+  datasigreal.y = real.map(t => t/L)
+  datasigimag.y = imag.map(t => t/L)
 
-  stemsigreal.update()
-  stemsigimag.update()
-  stemdftreal.update()
-  stemdftimag.update()
+  update()
 }
 
 function reset()
@@ -93,6 +77,11 @@ function reset()
   datadftreal.y.fill(0)
   datadftimag.y.fill(0)
 
+  update()
+}
+
+function update()
+{
   stemsigreal.update()
   stemsigimag.update()
   stemdftreal.update()

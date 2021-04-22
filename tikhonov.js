@@ -1,124 +1,105 @@
+"use strict";
 
+const L = 1024
 
-ir = [1,-1]
+const FFT = new FFTNayuki(L)
 
+const t = [...Array(L).keys()]
+const w = t.map((t) =>  1 - Math.cos(2*Math.PI * t/ L)) // window, to guarantee circular boundary conditions
+const x = t.map((t, idx) => 4+(4*Math.exp(-((t -600)**2/5**2/2)) -4*Math.exp(-((t -300)**2/30**2/2)) + 5*Math.exp(-((t -200)**2/200**2/2)) + 3*Math.exp(-((t -700)**2/50**2/2)))* w[idx])
 
-var margins = {
-  left: 50,
-  right: 200,
-  bottom: 10,
-  top: 10
-};
-
-var L = 1024
-
-FFT = new FFTNayuki(L)
-
-var t = [...Array(L).keys()]
-var w = t.map((t) =>  1 - Math.cos(2*Math.PI * t/ L))
-
-var x = t.map((t, idx) => 4+(4*Math.exp(-((t -600)**2/5**2/2)) -4*Math.exp(-((t -300)**2/30**2/2)) + 5*Math.exp(-((t -200)**2/200**2/2)) + 3*Math.exp(-((t -700)**2/50**2/2)))* w[idx])
-
-Lh = 401
-Lh2 = 7
+// filter
+const Lh = 401
+const Lh2 = 7
 var h = [...Array(Lh).keys()].map(t => (1 - Math.cos(2*Math.PI * t / Lh))/Lh/2 + 0*(1 - Math.cos(2*Math.PI * t / Lh2))/Lh2/2)
 
-var H = fft(h, Array(h.length).fill(0), L)
-var X = fft(x, Array(x.length).fill(0))
+let harray = new Float32Array(L)
+let harrayi = new Float32Array(L)
+harray.set(h)
+FFT.forward(harray, harrayi)
+const H = {real:harray, imag:harrayi}
 
-
-var hdiff = [1, -2, 1]
-var Hdiff = fft(hdiff, Array(h.length).fill(0), L)
+let xarray = Float32Array.from(x)
+let xarrayi = new Float32Array(L)
+FFT.forward(xarray, xarrayi)
+const X = {real:xarray, imag:xarrayi}
 
 var Yr = X.real.map((T, idx) => T * H.real[idx] - X.imag[idx] * H.imag[idx])
 var Yi = X.real.map((T, idx) => T * H.imag[idx] + X.imag[idx] * H.real[idx])
+FFT.inverse(Yr, Yi)
+const y = Yr.map(t => t/L)
 
-var y = ifft(Yr, Yi).real
-
-rdn = d3.randomNormal(0, 0.05)
+const rdn = d3.randomNormal(0, 0.05)
 var noise = t.map(t => rdn())
 
 var yn = y.map((t, idx) => t + noise[idx])
 
-var Yn = fft(yn, Array(yn.length).fill(0))
-
+const Ynr = Float32Array.from(yn)
+const Yni = new Float32Array(L)
+FFT.forward(Ynr, Yni)
+const Yn = {real: Ynr, imag: Yni}
 
 var Hgain = H.real.map((t, idx) => t**2 + H.imag[idx]**2)
 
+const datax = {x: t, y:x}
+const datay = {x: t, y:yn}
+const datayest = {x: t, y:Array(L).fill(0)}
 
-var xest = Array(L).fill(0)
+const dataxest = {x: t, y:Array(L).fill(0)}
+const datalcur = {x: [], y:[], r:[]}
+const datal = {x: [], y:[], r:[]}
+const dataerr = {x: [], y:[], r:[]}
+const dataerrcur = {x: [], y:[], r:[]}
 
+const Rcur = 10;
 
-datax = {x: t, y:x}
-datay = {x: t, y:yn}
-datayest = {x: t, y:Array(L).fill(0)}
-
-dataxest = {x: t, y:xest}
-datal = {x: [], y:[], r:[]}
-datalcur = {x: [], y:[], r:[]}
-dataerr = {x: [], y:[], r:[]}
-dataerrcur = {x: [], y:[], r:[]}
-
-R = 3;
-Rcur = 10;
-
-nlambda = 10;
-newnlambda = 11;
+var nlambda = 10;
+var newnlambda = 11;
 
 function tikh(Yn, H, Hgain, lambda, hregul)
 {
-  harray = new Float32Array(L)
-  harray.fill(0)
-  harrayi = new Float32Array(L)
-harrayi.fill(0)
+  let harray = new Float32Array(L)
+  let harrayi = new Float32Array(L)
   harray.set(hregul)
 
   FFT.forward(harray, harrayi)
-  Hregul = {real: harray, imag: harrayi}
+  let Hregul = {real: harray, imag: harrayi}
 
-  var Hregulgain = Hregul.real.map((t, idx) => t**2 + Hregul.imag[idx]**2)
+  let Hregulgain = Hregul.real.map((t, idx) => t**2 + Hregul.imag[idx]**2)
 
-  Xestr = Yn.real.map((T, idx) => (T * H.real[idx] + Yn.imag[idx] * H.imag[idx]) / (Hgain[idx] + lambda * Hregulgain[idx]))
-  Xesti = Yn.real.map((T, idx) => (- T * H.imag[idx] + Yn.imag[idx] * H.real[idx]) / (Hgain[idx] + lambda * Hregulgain[idx]))
+  let Xestr = Yn.real.map((T, idx) => (T * H.real[idx] + Yn.imag[idx] * H.imag[idx]) / (Hgain[idx] + lambda * Hregulgain[idx]))
+  let Xesti = Yn.real.map((T, idx) => (- T * H.imag[idx] + Yn.imag[idx] * H.real[idx]) / (Hgain[idx] + lambda * Hregulgain[idx]))
 
-  xest = new Float32Array(L)
-  xest.set(Xestr)
-  xesti = new Float32Array(L)
-  xesti.set(Xesti)
+  let xest = Float32Array.from(Xestr)
+  let xesti = Float32Array.from(Xesti)
 
   FFT.inverse(xest, xesti)
   xest = xest.map(t => t/L)
 
-  var v = Math.log10(circularconvolve(xest, hregul).reduce((a, v) => a + v**2, 0))
+  let v = Math.log10(circularconvolve(xest, hregul).reduce((a, v) => a + v**2, 0))
 
-  var Yr = Xestr.map((T, idx) => T * H.real[idx] - Xesti[idx] * H.imag[idx])
-  var Yi = Xestr.map((T, idx) => T * H.imag[idx] + Xesti[idx] * H.real[idx])
+  let Yr = Xestr.map((T, idx) => T * H.real[idx] - Xesti[idx] * H.imag[idx])
+  let Yi = Xestr.map((T, idx) => T * H.imag[idx] + Xesti[idx] * H.real[idx])
 
-  yest = new Float32Array(L)
-  yest.set(Yr)
-  yesti = new Float32Array(L)
-  yesti.set(Yi)
+  let yest = Float32Array.from(Yr)
+  let yesti = Float32Array.from(Yi)
 
   FFT.inverse(yest, yesti)
   yest = yest.map(t => t/L)
 
-  delta = yest.map((u, idx) => u - yn[idx])
+  let delta = yest.map((u, idx) => u - yn[idx])
 
-  var u = Math.log10(delta.reduce((a, v) => a + v**2, 0))
+  let u = Math.log10(delta.reduce((a, v) => a + v**2, 0))
 
-  var err = xest.map((u, idx) => u - x[idx])
-  var err2 = Math.log10(err.reduce((a, v) => a + v**2, 0))
-
+  let err = xest.map((u, idx) => u - x[idx])
+  let err2 = Math.log10(err.reduce((a, v) => a + v**2, 0))
 
   return [xest, yest, u, v, err2]
-
 }
 
-tikh0 = (Yn, H, Hgain, lambda) => tikh(Yn, H, Hgain, lambda, [1])
-tikh1 = (Yn, H, Hgain, lambda) => tikh(Yn, H, Hgain, lambda, [1, -1])
-tikh2 = (Yn, H, Hgain, lambda) => tikh(Yn, H, Hgain, lambda, [1, -2, 1])
-
-method = tikh0
+const tikh0 = (Yn, H, Hgain, lambda) => tikh(Yn, H, Hgain, lambda, [1])
+const tikh1 = (Yn, H, Hgain, lambda) => tikh(Yn, H, Hgain, lambda, [1, -1])
+const tikh2 = (Yn, H, Hgain, lambda) => tikh(Yn, H, Hgain, lambda, [1, -2, 1])
 
 function update_filter()
 {
@@ -142,92 +123,76 @@ function update_lambda()
 
 function update()
 {
-  steplam = (newnlambda > nlambda) ? 1 : -1
-
-
+  let steplam = (newnlambda > nlambda) ? 1 : -1
 
   if (newnlambda != nlambda)
   {
     for (var i = nlambda + steplam ; i != newnlambda + steplam; i += steplam)
     {
       lambda = 10**(i/4-10)
-      res = method(Yn, H, Hgain, lambda)
+      var res = method(Yn, H, Hgain, lambda)
+
       datal.x.push(res[2])
       datal.y.push(res[3])
-      datal.r.push(R)
       dataerr.x.push(Math.log10(lambda))
       dataerr.y.push(res[4])
-      dataerr.r.push(R)
 
-
-
-
+    }
   dataxest.y = res[0]
-
-
-  sigxest.update()
-
-
   datayest.y = res[1]
 
-  datal.x.push(res[2])
-  datal.y.push(res[3])
-  datal.r.push(R)
   datalcur.x = [res[2]]
   datalcur.y = [res[3]]
   datalcur.r = [Rcur]
 
-  sigyest.update()
-  lcurve.update()
-  lcurvecur.update()
-
-
   dataerrcur.x = [Math.log10(lambda)]
   dataerrcur.y = [res[4]]
   dataerrcur.r = [Rcur]
+
+  sigxest.update()
+  sigyest.update()
+  lcurve.update()
+  lcurvecur.update()
   scerr.update()
   scerrcur.update()
 }
-}
   nlambda = newnlambda
-
-
-
 }
 
+const margins = {
+  left: 50,
+  right: 200,
+  bottom: 10,
+  top: 10
+};
 
-T = 10
-F = 10
+const xrange = [-0,L];
+const yrange = [-0.5, 15.5]
+const yrange2 = [-0.5, 5]
 
-xrange = [-0,L];
-yrange = [-0.5, 15.5]
-yrange2 = [-0.5, 5]
+const urange = [-2, 5]
+const vrange = [-10, 10]
 
-urange = [-2, 5]
-vrange = [-10, 10]
+const lrange = [-10, 15]
+const erange = [-2, 10]
 
-lrange = [-40, 20]
-erange = [-10, 20]
+const ntickx = 10
+const nticky = 5
 
+const axisx = new Axis("#plotx", "sig", 600, 300, margins, xrange, yrange, ntickx, nticky)
+const axisy = new Axis("#ploty", "fourier", 600, 300, margins, xrange, yrange2, ntickx, nticky)
+const axisl = new Axis("#lcurve", "lcurve", 600, 300, margins, urange, vrange, ntickx, nticky)
+const axiserr = new Axis("#err", "err", 600, 300, margins, lrange, erange, ntickx, nticky)
 
-ntickx = 10
-nticky = 5
+const sigx = axisx.line("sigx", "\\(x\\)", datax)
+const sigy = axisy.line("sigy", "\\(y\\)", datay)
+const sigxest = axisx.line("sigxest", "\\(\\hat x_\\lambda\\)", dataxest)
+const sigyest = axisy.line("sigyest", "\\(H\\hat x_\\lambda\\)", datayest)
 
-axisx = new Axis("#plotx", "sig", 600, 300, margins, xrange, yrange, ntickx, nticky)
-axisy = new Axis("#ploty", "fourier", 600, 300, margins, xrange, yrange2, ntickx, nticky)
-axisl = new Axis("#lcurve", "lcurve", 600, 300, margins, urange, vrange, ntickx, nticky)
-axiserr = new Axis("#err", "err", 600, 300, margins, lrange, erange, ntickx, nticky)
-
-sigx = axisx.line("sigx", "\\(x\\)", datax)
-sigy = axisy.line("sigy", "\\(y\\)", datay)
-sigxest = axisx.line("sigxest", "\\(\\hat x_\\lambda\\)", dataxest)
-sigyest = axisy.line("sigyest", "\\(H\\hat x_\\lambda\\)", datayest)
-
-lcurve = axisl.line("lcurve", "L-curve", datal)
-lcurvecur = axisl.scatter("lcurvecur", "", datalcur)
-scerr = axiserr.line("err", "MSE", dataerr)
-scerrcur = axiserr.scatter("err", "", dataerrcur)
-
+const lcurve = axisl.line("lcurve", "L-curve", datal)
+const lcurvecur = axisl.scatter("lcurvecur", "", datalcur)
+const scerr = axiserr.line("err", "MSE", dataerr)
+const scerrcur = axiserr.scatter("err", "", dataerrcur)
 
 d3.select('#lambda').on("input", update_lambda)
 
@@ -245,12 +210,12 @@ const funs = {
 
 d3.select('#filter').on("input", update_filter)
 
-filter = document.getElementById('filter')
+const filter = document.getElementById('filter')
 
-keys = (Object.keys(names))
-for (idin of keys)
+const keys = (Object.keys(names))
+for (var idin of keys)
 {
-  opt1 = document.createElement("option")
+  let opt1 = document.createElement("option")
   opt1.value = idin
   opt1.text =  names[idin]
 
@@ -260,3 +225,6 @@ for (idin of keys)
   }
   filter.add(opt1, null)
 }
+
+var method = funs["tikh0"]
+update()

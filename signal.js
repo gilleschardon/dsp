@@ -68,48 +68,6 @@ function down2s(array)
   return output
 }
 
-function fft(real, imag, N = 0)
-{
-  if (real.length == 0)
-  {
-    return {real: Array(N).fill(0), imag: Array(N).fill(0)}
-  }
-
-  N = N == 0 ? real.length : N
-
-  if (N == 1)
-  {
-    return {real: [...real], imag: [...imag]}
-  }
-
-  var F1 = fft(down2(real), down2(imag), N/2)
-  var F2 = fft(down2s(real), down2s(imag), N/2)
-
-  var R1 = F1.real.concat(F1.real)
-  var R2 = F2.real.concat(F2.real)
-
-  var I1 = F1.imag.concat(F1.imag)
-  var I2 = F2.imag.concat(F2.imag)
-
-  var R = R1.map((u, idx) => u + Math.cos(-2*Math.PI * idx / N) * R2[idx] - Math.sin(-2*Math.PI * idx / N) * I2[idx])
-  var I = I1.map((u, idx) => u + Math.sin(-2*Math.PI * idx / N) * R2[idx] + Math.cos(-2*Math.PI * idx / N) * I2[idx])
-
-  return {real: [...R],   imag: [...I]}
-}
-
-function ifft(real, imag)
-{
-  var N = real.length
-
-  F = fft(imag, real)
-
-  IF = {
-    real: F.imag.map(t => t/N),
-    imag: F.real.map(t => t/N)
-  }
-  return IF
-}
-
 function proxtv(y, lam)
 {
     var N = y.length

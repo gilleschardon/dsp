@@ -1,0 +1,78 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <meta charset="utf-8">
+
+  <title>Seuillage de coefficients d'ondelettes</title>
+
+
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+
+
+  .sigs, .cs, .errs, .errsc   {color: blue;}
+  .sigh, .ch, .errh, .errhc   {color: red;}
+
+
+  .x0 {color: black; opacity: 0.5}
+
+    .line {stroke-width: 2px }
+
+  .axis {
+    opacity: 1;
+    stroke-width: 1;
+  }
+  .axis line {
+    opacity: 1;
+    stroke-width: 1;
+  }
+  .xgrid, .ygrid  {
+    opacity: 1;
+    stroke-width: 2px;
+    stroke: #eee;
+  }
+
+  .domain, .tick line {
+    stroke: #aaa;
+  }
+
+  .frame {
+    opacity: 1;
+    stroke-width: 2px;
+    stroke: #999;
+  }
+
+  #plotx, #plotc, #csoft, #chard, #soft, #hard, #err
+  {
+    display: inline-block
+  }
+
+
+
+  </style>
+</head>
+
+<body>
+<h1>Seuillage de coefficients d'ondelettes</h1>
+  <p>Seuil \(T\) <input class="slider" type="range" min="0" max="400" value="0" step="1" id="T"></input></p>
+
+  <div id="plotx"></div>
+  <div id="plotc"></div>
+  <div id="csoft"></div>
+  <div id="chard"></div>
+  <div id="soft"></div>
+  <div id="hard"></div>
+  <div id="err"></div>
+
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="simpled3.js"></script>
+  <script src="signal.js"></script>
+
+  <script src="wavedenoise.js"></script>
+<script> window.MathJax.typeset()</script>
+</body>
+</html>

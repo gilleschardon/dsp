@@ -87,12 +87,10 @@ function tikh(Yn, H, Hgain, lambda, hregul)
   FFT.inverse(yest, yesti)
   yest = yest.map(t => t/L)
 
-  let delta = yest.map((u, idx) => u - yn[idx])
-
-  let u = Math.log10(delta.reduce((a, v) => a + v**2, 0))
-
-  let err = xest.map((u, idx) => u - x[idx])
-  let err2 = Math.log10(err.reduce((a, v) => a + v**2, 0))
+  let delta = addmult(yest, yn, -1)
+  let u = Math.log10(norm22(delta))
+  let err = addmult(xest, x, -1)
+  let err2 = Math.log10(norm22(err))
 
   return [xest, yest, u, v, err2]
 }

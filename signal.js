@@ -1,8 +1,8 @@
-
+"use strict";
 
 function convolve(arr1, arr2)
 {
-  output = Array(arr1.length + arr2.length - 1).fill(0)
+  var output = Array(arr1.length + arr2.length - 1).fill(0)
 
   for (var k = 0 ; k < arr1.length ; k++)
   {
@@ -11,34 +11,84 @@ function convolve(arr1, arr2)
 
   return output
 }
+//
+// function circularconvolve(arr1, arr2)
+// {
+//   consN = Math.max(arr1.length, arr2.length)
+//   output = Array(N).fill(0)
+//
+//   if (arr1.length < N)
+//   {
+//     for (var k = 0 ; k < arr1.length ; k++)
+//     {
+//       output.splice(k, N-k, ...output.slice(k, N).map((v, idx) => v + arr2[idx] * arr1[k]))
+//       output.splice(0, k, ...output.slice(0, k).map((v, idx) => v + arr2[idx+N-k] * arr1[k]))
+//     }
+//   }
+//   else
+//   {
+//     for (var k = 0 ; k < arr2.length ; k++)
+//     {
+//       output.splice(k, N-k, ...output.slice(k, N).map((v, idx) => v + arr1[idx] * arr2[k]))
+//       output.splice(0, k, ...output.slice(0, k).map((v, idx) => v + arr1[idx+N-k] * arr2[k]))
+//     }
+//   }
+//   return output
+// }
+//
+// function circshift(x)
+// {
+//   var y = Float32Array.from(x)
+//   var z = y[y.length-1]
+//   y.copyWithin(1, 0)
+//   y[0] = z
+//   return y
+// }
 
-function circularconvolve(arr1, arr2)
+function circshift(x, n)
 {
-  N = Math.max(arr1.length, arr2.length)
-  output = Array(N).fill(0)
+  if (n  == 0)
+  {
+    return Float32Array.from(x)
+  }
 
-  if (arr1.length < N)
+  if (n > 0)
   {
-    for (var k = 0 ; k < arr1.length ; k++)
-    {
-      output.splice(k, N-k, ...output.slice(k, N).map((v, idx) => v + arr2[idx] * arr1[k]))
-      output.splice(0, k, ...output.slice(0, k).map((v, idx) => v + arr2[idx+N-k] * arr1[k]))
-    }
-  }
-  else
+
+  var y = Float32Array.from(x)
+  var z = y.slice(y.length-n)
+  y.copyWithin(n, 0)
+  y.set(z)
+  return y
+}
+
+  if (n < 0)
   {
-    for (var k = 0 ; k < arr2.length ; k++)
-    {
-      output.splice(k, N-k, ...output.slice(k, N).map((v, idx) => v + arr1[idx] * arr2[k]))
-      output.splice(0, k, ...output.slice(0, k).map((v, idx) => v + arr1[idx+N-k] * arr2[k]))
-    }
+    var y = Float32Array.from(x)
+    var z = y.slice(0, -n)
+    y.copyWithin(0, -n)
+    y.set(z, y.length+n)
+    return y
   }
+}
+
+function circularconvolve(x, h)
+{
+  var output = new Float32Array(x.length)
+  var shift = x
+
+  for (var k = 0 ; k < h.length ; k++)
+    {
+      output = output.map((u, idx) => u + h[k]*shift[idx])
+      shift = circshift(shift, 1)
+    }
   return output
 }
 
+
 function up2(array)
 {
-  output = Array(array.length * 2 - 1).fill(0)
+  var output = new Float32Array(array.length * 2)
   array.forEach((v, idx) => output[2*idx] = v)
   return output
 }
@@ -50,7 +100,7 @@ function down2(array)
     return Array(0)
   }
 
-  output = Array(Math.ceil(array.length/2)).fill(0)
+  var output = Array(Math.ceil(array.length/2)).fill(0)
   output.forEach((v, idx) => output[idx] = array[2*idx])
 
   return output
@@ -62,7 +112,7 @@ function down2s(array)
   {
     return Array(0)
   }
-  output = Array(Math.floor(array.length/2)).fill(0)
+  var output = Array(Math.floor(array.length/2)).fill(0)
   output.forEach((v, idx) => output[idx] = array[2*idx+1])
 
   return output
@@ -147,6 +197,92 @@ function proxtv(y, lam)
     return x
 }
 
+function dwtiter(x, h, g)
+{
+  var scalecoeffs = down2(circshift(circularconvolve(x, h), -(h.length-1)))
+  var wavecoeffs = down2(circshift(circularconvolve(x, g), -(g.length-1)))
+
+  return [scalecoeffs, wavecoeffs]
+}
+
+
+//circshift
+function idwtiter(sc, wc, h, g)
+{
+  var scalecomp = circularconvolve(up2(sc), h)
+  var wavecomp = circularconvolve(up2(wc), g)
+
+  return scalecomp.map((u, idx) => u + wavecomp[idx])
+}
+
+function idwt(xw, h, g, L)
+{
+  if (L == 0)
+  {
+    return xw
+  }
+
+  var scalecomp = idwt(xw.slice(0, xw.length/2), h, g, L-1)
+
+  return idwtiter(scalecomp, xw.slice(xw.length/2), h, g)
+//  return idwtiter(scalecomp, new Float32Array(x.length/2), h, g)
+
+}
+
+function dwt(x, h, g, L)
+{
+  if (L == 0)
+  {
+    return x
+  }
+
+  var output = new Float32Array(x.length)
+
+  var dwtcoeffs = dwtiter(x, h, g)
+  output.set(dwt(dwtcoeffs[0], h, g, L-1))
+  output.set(dwtcoeffs[1], x.length/2)
+
+  return output
+}
+
+function soft1(x, T)
+{
+  return x > 0 ? Math.max(x - T, 0) : Math.min(x + T, 0)
+}
+
+function hard1(x, T)
+{
+  return Math.abs(x) < T ? 0 : x
+}
+
+
+function soft(x, T)
+{
+  return x.map(t => soft1(t, T))
+}
+function hard(x, T)
+{
+  return x.map(t => hard1(t, T))
+}
+
+function addmult(a, b, lambda)
+{
+  return a.map((t, idx) => t + lambda * b[idx])
+}
+
+function mult(a, b)
+{
+
+  return a.map((t, idx) => t * b[idx])
+}
+
+function norm22(a)
+{
+  return a.reduce((a, v) => a + v**2, 0)
+}
+
+
+
 /*
  * Free FFT and convolution (JavaScript)
  *
@@ -173,7 +309,6 @@ function proxtv(y, lam)
  * Slightly restructured by Chris Cannam, cannam@all-day-breakfast.com
  */
 
-"use strict";
 
 /*
  * Construct an object for calculating the discrete Fourier transform (DFT) of size n, where n is a power of 2.

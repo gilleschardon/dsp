@@ -12,13 +12,15 @@ class Axis {
   // width, height, scalaires
   // margin left right top bottom
   // xrange yrange arrays
-  constructor(parent, id, width, height, margin, xrange, yrange, ntickx, nticky)
+  constructor(parent, id, width, height, margin, xrange, yrange, ntickx, nticky, xlabel="", ylabel="")
   {
 	this.parent = parent
   this.id = id
   this.width = width
   this.height = height
   this.margin = margin
+
+
 
   this.svg = d3.select(parent).append("svg")
     // svg contenant les éléments
@@ -38,6 +40,9 @@ class Axis {
   // scales
   this.xrange = xrange
   this.yrange = yrange
+
+  this.xlabel = xlabel
+  this.ylabel = ylabel
 
 // axes
   this.scales_and_axis()
@@ -108,6 +113,13 @@ class Axis {
     this.ax.append("g").attr("transform", "translate(" + this.width + ",0)").attr("transform", "translate(" + this.scalex(0) + ",0)") // axe x au zero
     .call(d3.axisLeft(this.scaley).ticks(nticky).tickFormat(d3.format("")))
 
+  this.svg.append("text")
+      .attr("transform",
+            "translate(" + (this.width/2 + this.margin.left) + " ," +
+                           (this.height +  30) + ")")
+      .style("text-anchor", "middle")
+      .text(this.xlabel);
+
   }
 
 // génère un stemplot
@@ -134,6 +146,7 @@ stem(id, tag, data, drag_update = null, symbol = d3.symbol().size(1).type(d3.sym
   }
   return new Stem(g, data, this.scalex, this.scaley, this.yrange, drag_update, symbol, rotate)
 }
+
 
   // voronoi on trace les cellules
   scatter(id, tag, data, drag_update=null, symbol = d3.symbol().size(1).type(d3.symbolCircle), voronoi=false) {
@@ -176,6 +189,14 @@ stem(id, tag, data, drag_update = null, symbol = d3.symbol().size(1).type(d3.sym
 
     return new Line(g, data, this.scalex, this.scaley)
   }
+
+  annulus(id, tag, data)
+  {
+    var g = this.svg.append("g").attr("class", id).attr("clip-path", "url(#" + this.id + "clip)")
+    return new Annulus(g, data, this.scalex, this.scaley)
+
+  }
+
   area(id, tag, data) {
     var g = this.svg.append("g").attr("class", id).attr("clip-path", "url(#" + this.id + "clip)")
     return new Area(g, data, this.scalex, this.scaley)
@@ -294,6 +315,8 @@ class Scatter{
 
     this.voronoi = voronoi
 
+    this.Z = d3.zip(data.x, data.y, data.r)
+
     // on stocke une référence aux données : pour mettre à jour, on modifie les données et on appelle update()
     this.data = data
     const Z = d3.zip(this.data.x, this.data.y, this.data.r)
@@ -325,9 +348,9 @@ class Scatter{
   // update du graphe
   update() {
 
-    const Z = d3.zip(this.data.x, this.data.y, this.data.r)
+    this.Z = d3.zip(this.data.x, this.data.y, this.data.r)
 
-    var selp = this.g1.selectAll("path").data(Z)
+    var selp = this.g1.selectAll("path").data(this.Z)
 
     selp.exit().remove()
     selp.enter().append("path").attr("d", this.symbol).attr("fill", "currentcolor").attr('transform', (d, i) => ("translate(" + this.scalex(d[0]) + ", " + this.scaley(d[1]) + ") scale(" + d[2] + ")"  +((this.rotate && d[1] < 0) ? " rotate(180)":"")))
@@ -339,6 +362,27 @@ class Scatter{
       this.g2.selectAll("path").attr("stroke", "blue").attr("stroke-width", 2).attr("d", this.voronoi.render())
     }
   }
+
+  append() {
+
+//    const Z = d3.zip(this.data.x, this.data.y, this.data.r)
+    const nn = this.data.x.length
+    this.Z.push([this.data.x[nn-1], this.data.y[nn-1],this.data.r[nn-1]])
+    var selp = this.g1.selectAll("path").data(this.Z)
+
+    selp.enter().append("path").attr("d", this.symbol).attr("fill", "currentcolor").attr('transform', (d, i) => ("translate(" + this.scalex(d[0]) + ", " + this.scaley(d[1]) + ") scale(" + d[2] + ")"  +((this.rotate && d[1] < 0) ? " rotate(180)":"")))
+
+    if (this.voronoi)
+    {     this.voronoi = d3.Delaunay.from(Z, d => this.scalex(d[0]),  d => this.scaley(d[1]))
+      .voronoi([this.scalex(this.xrange[0]),this.scaley(this.yrange[1]),this.scalex(this.xrange[1]),this.scaley(this.yrange[0])])
+      this.g2.selectAll("path").attr("stroke", "blue").attr("stroke-width", 2).attr("d", this.voronoi.render())
+    }
+  }
+
+
+
+
+
   marker_attr(name, value) {this.g1.attr(name, value)}
   attr(name, value) {this.g.attr(name, value)}
 }
@@ -357,6 +401,7 @@ class Line{
     this.data = data
 
      const XY = d3.zip(this.data.x, this.data.y)
+
      this.g1.append("path").datum(XY).attr("d", d3.line().x(d => this.scalex(d[0])).y(d => this.scaley(d[1]))).attr("fill", "none").attr("stroke", "currentcolor")
   }
 
@@ -367,6 +412,28 @@ class Line{
   }
 }
 
+class Annulus
+{
+  constructor(g, data, scalex, scaley){
+  this.g1 = g.append("g").attr("class", "annulus");
+
+  //échelle
+  this.scalex = scalex;
+  this.scaley = scaley;
+
+  // on stocke une référence aux données : pour mettre à jour, on modifie les données et on appelle update()
+  this.data = data
+
+   this.g1.append("path").datum(this.data).attr("d", d3.arc().innerRadius(d => this.scalex(d.r)-this.scalex(0))
+   .outerRadius(d => this.scalex(d.R)-this.scalex(0)).startAngle(0).endAngle(Math.PI*2)).attr("fill", "currentcolor").attr("transform", "translate(" + this.scalex(0) + ',' + this.scaley(0) + ')')
+}
+
+// update du graphe
+update() {
+     this.g1.select("path").datum(this.data).attr("d", d3.arc().innerRadius(d => this.scalex(d.r)-this.scalex(0))
+     .outerRadius(d => this.scalex(d.R)-this.scalex(0)).startAngle(0).endAngle(Math.PI*2)).attr("fill", "currentcolor").attr("fill", "currentcolor")
+}
+}
 
 class Rect{
   constructor(g, data, scalex, scaley){

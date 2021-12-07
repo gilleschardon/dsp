@@ -171,8 +171,6 @@ function reset()
 
   L = 0
   update()
-
-
 }
 
 

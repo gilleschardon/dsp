@@ -11,6 +11,18 @@ function convolve(arr1, arr2)
 
   return output
 }
+
+function correlate(arr1, arr2)
+{
+  var output = Array(arr1.length + arr2.length - 1).fill(0)
+
+  for (var k = 0 ; k < arr1.length ; k++)
+  {
+    output.splice(k, arr2.length, ...output.slice(k, k+arr2.length).map((v, idx) => v + arr2[idx] * arr1[arr.length-k-1]))
+  }
+
+  return output
+}
 //
 // function circularconvolve(arr1, arr2)
 // {
@@ -281,7 +293,11 @@ function norm22(a)
   return a.reduce((a, v) => a + v**2, 0)
 }
 
-
+function linearinterp(x, y, t)
+{
+  const idx = x.findIndex(u => u > t)
+  return y[idx-1] + (t - x[idx-1]) * (y[idx] - y[idx-1])/(x[idx] - x[idx-1])
+}
 
 /*
  * Free FFT and convolution (JavaScript)

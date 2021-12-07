@@ -138,7 +138,7 @@ var newnlambda = 11;
 const margins = {
   left: 50,
   right: 200,
-  bottom: 10,
+  bottom: 30,
   top: 10
 };
 
@@ -150,19 +150,19 @@ const urange = [-2, 5]
 const vrange = [-10, 10]
 
 const lrange = [-0, 20]
-const erange = [-1, 2000]
+const erange = [-200, 2000]
 
 const ntickx = 10
 const nticky = 5
 
 //const axisx = new Axis("#plotx", "xn", 600, 200, margins, xrange, yrange, ntickx, nticky)
 //const axisc = new Axis("#plotc", "c", 600, 200, margins, xrange, yrange2, ntickx, nticky)
-const axiscs = new Axis("#csoft", "csoft", 600, 200, margins, xrange, yrange2, ntickx, nticky)
-const axisch = new Axis("#chard", "chard", 600, 200, margins, xrange, yrange2, ntickx, nticky)
+const axiscs = new Axis("#csoft", "csoft", 600, 200, margins, xrange, yrange2, ntickx, nticky, "Index")
+const axisch = new Axis("#chard", "chard", 600, 200, margins, xrange, yrange2, ntickx, nticky, "Index")
 const axiss = new Axis("#soft", "soft", 600, 200, margins, xrange, yrange, ntickx, nticky)
 const axish = new Axis("#hard", "hard", 600, 200, margins, xrange, yrange, ntickx, nticky)
 
-const axiserr = new Axis("#err", "err", 600, 200, margins, lrange, erange, ntickx, nticky)
+const axiserr = new Axis("#err", "err", 600, 200, margins, lrange, erange, ntickx, nticky, "Threshold")
 
 //const sigx = axisx.line("sigx", "\\(x\\)", datax)
 //const sigc = axisc.line("sigc", "\\(y\\)", datac)

@@ -10,15 +10,15 @@ var margins = {
 var resol_t = 1000
 
 
-var initial = [0.2,0.4]
+var initial = [1,1]
 
-Tmax = 100
+Tmax = 20
 
 var step = 0.02
 
-var alpha = 1;
+var alpha = 0.8;
 var beta = 1
-var gamma = 1;
+var gamma = 2;
 var delta = 1
 
 var L = 0;
@@ -51,12 +51,44 @@ data2Ds = {x: [proj1(initial)] , y:[proj2(initial)], r:[10]}
 
 
 range = [-0,Tmax];
-yrange = [0, 5]
+yrange = [0, 8]
 
 ntickx = 10
 nticky = 5
 
 
+function moveinitial(i, x, y)
+{
+   datax.y = [x]
+   datay.y = [y]
+   datax.x = [0]
+   datay.x = [0]
+
+   data2D.x = [x]
+   data2D.y = [y]
+
+   data2Ds.x = [x]
+   data2Ds.y = [y]
+   L = 0;
+   update()
+}
+
+function reset()
+{
+  stop()
+   datax.y = [datax.y[0]]
+   datay.y = [datay.y[0]]
+   datax.x = [0]
+   datay.x = [0]
+
+   data2D.x = [data2D.x[0]]
+   data2D.y = [data2D.y[0]]
+
+   data2Ds.x = [data2D.x[0]]
+   data2Ds.y = [data2D.y[0]]
+   L = 0;
+   update()
+}
 
 function update()
 {
@@ -74,10 +106,13 @@ function update()
 function compute_step()
 {
 
-  var G = grad([datax.y[L], datay.y[L]])
+  //var G = grad([datax.y[L], datay.y[L]])
 
-  datax.y.push(datax.y[L] + step * G[0])
-  datay.y.push(datay.y[L] + step * G[1])
+  var newx = datax.y[L] / (1 - step * (alpha - beta * datay.y[L]))
+  var newy = datay.y[L] + step * datay.y[L] * (-gamma + delta * newx)
+
+  datax.y.push(newx)//datax.y[L] + step * G[0])
+  datay.y.push(newy)//datay.y[L] + step * G[1])
   datax.x.push(datax.x[L] + step)
   datay.x.push(datay.x[L] + step)
 
@@ -99,17 +134,27 @@ function compute_step()
 
   if(datax.x[L] > Tmax)
   {
-    console.log("stop")
-    window.clearInterval(zzz)
+    window.clearInterval(timer)
   }
 
 }
+var timer
+
+function start()
+{
+  timer = window.setInterval(compute_step, 20)
+}
+
+function stop()
+{
+  window.clearInterval(timer)
+}
 
 
-axisx= new Axis("#plotlotka", "x", 800, 200, margins, range, yrange, ntickx, nticky)
+axisx= new Axis("#plotlotka", "x", 800, 400, margins, range, yrange, ntickx, nticky)
 
-range3Dy = [-0,5]
-range3Dx = [-0,5]
+range3Dy = [-0,8]
+range3Dx = [-0,8]
 
 axis2D= new Axis("#plot2D", "p3d", 400, 400, margins, range3Dx, range3Dy, ntickx, nticky)
 
@@ -119,10 +164,13 @@ ploty = axisx.line("IC2", "\\(y(t)\\)", datay)
 
 
 plot2D = axis2D.line('IC13', "", data2D)
-plot2Ds = axis2D.scatter('IC1', "", data2Ds)
+plot2Ds = axis2D.scatter('IC1', "", data2Ds, moveinitial)
 d3.select('#step').on("click", compute_step)
 
 
 update()
 
-var zzz = window.setInterval(compute_step, 10)
+
+d3.select('#start').on("click", start)
+d3.select('#reset').on("click", reset)
+d3.select('#stop').on("click", stop)

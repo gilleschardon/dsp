@@ -47,6 +47,7 @@ for (var i = 0 ; i < K - 1 ; i++)
 var t = [...Array(scale.length).keys()].map((t) => t / 2**K)
 
 datascale = {x:t.map(u => u), y:scale}
+datascaleb = {x:t.map(u => u+1), y:scale}
 
 
 
@@ -56,13 +57,19 @@ datascale2 = {x: t.map(u => u*2 ), y:scale.map(u => u/Math.sqrt(2)*ir[0])}
 datawave1 = {x: t.map(u => u*2-2), y:wave.map(u => u/Math.sqrt(2)*irwave[2])}
 datawave2 = {x: t.map(u => u*2 -2+ 2), y:wave.map(u => u/Math.sqrt(2)*irwave[0])}
 
+datascale1b = {x: t.map(u => u*2 - 2), y:scale.map(u => u/Math.sqrt(2)*ir[3])}
+datascale2b = {x: t.map(u => u*2 ), y:scale.map(u => u/Math.sqrt(2)*ir[1])}
+
+datawave1b = {x: t.map(u => u*2-2), y:wave.map(u => u/Math.sqrt(2)*irwave[3])}
+datawave2b = {x: t.map(u => u*2 -2+ 2), y:wave.map(u => u/Math.sqrt(2)*irwave[1])}
+
 
 sigrange = [-2.1,6.1];
 yrangesig = [-0.6, 1.1]
 
 ntickx = 10
 nticky = 5
-axisscale = new Axis("#plotscale", "sig", 1400, 600, margins, sigrange, yrangesig, ntickx, nticky)
+axisscale = new Axis("#plotscale", "sig", 1400, 400, margins, sigrange, yrangesig, ntickx, nticky)
 
 
 scaleline = axisscale.line("scale", "\\(\\phi_{0,0}(t)\\)", datascale)
@@ -72,3 +79,14 @@ scaleline2 = axisscale.line("scalen", "\\(\\phi_{1,0}(t)\\)", datascale2)
 
 scalewave1 = axisscale.line("waven", "\\(\\psi_{1,0}(t)\\)", datawave1)
 scalewave2 = axisscale.line("waven", "\\(\\psi_{1,1}(t)\\)", datawave2)
+
+axisscaleb = new Axis("#plotscale", "sig", 1400, 400, margins, sigrange, yrangesig, ntickx, nticky)
+
+
+scalelineb = axisscaleb.line("scale", "\\(\\phi_{0,1}(t)\\)", datascaleb)
+
+scaleline1b = axisscaleb.line("scalen", "\\(\\phi_{1,-1}(t)\\)", datascale1b)
+scaleline2b = axisscaleb.line("scalen", "\\(\\phi_{1,0}(t)\\)", datascale2b)
+
+scalewave1b = axisscaleb.line("waven", "\\(\\psi_{1,0}(t)\\)", datawave1b)
+scalewave2b = axisscaleb.line("waven", "\\(\\psi_{1,1}(t)\\)", datawave2b)

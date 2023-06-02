@@ -1,0 +1,73 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <meta charset="utf-8">
+
+  <title>Upsampling</title>
+
+
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+
+
+  .sigreal   {color: blue;opacity: 0.5}
+  .PR, .NR {color: blue}
+
+  .line {stroke-width: 2px }
+  .sigD {color: blue;opacity: 0.5}
+
+  .sigup {color: red;opacity: 0.5}
+  .sigupD {color: red;opacity: 0.5}
+
+  .area { opacity: 0.2}
+
+  .axis {
+    opacity: 1;
+    stroke-width: 1;
+  }
+  .axis line {
+    opacity: 1;
+    stroke-width: 1;
+  }
+  .xgrid, .ygrid  {
+    opacity: 1;
+    stroke-width: 2px;
+    stroke: #eee;
+  }
+
+  .domain, .tick line {
+    stroke: #aaa;
+  }
+
+  .frame {
+    opacity: 1;
+    stroke-width: 2px;
+    stroke: #999;
+  }
+
+  .rect {color: green; opacity: 0.2}
+
+
+  </style>
+</head>
+
+<body>
+<h1>DTFT of a cosine</h1>
+
+  <p>Frequency <input value="0" type="range" id="freq" min="000" max="50"/><p>
+  <p>Upsamling factor <input value="1" type="range" id="upsampling" min="1" max="5"/><p>
+
+
+  <div id="plotsig"></div>
+  <!-- <div id="plotdft"></div> -->
+
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="simpled3.js"></script>
+  <script src="upsampling.js"></script>
+<script> window.MathJax.typeset()</script>
+</body>
+</html>
